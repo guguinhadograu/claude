@@ -198,9 +198,9 @@ const ProductVisual = ({ data, isLeft }: { data: ProductData; isLeft: boolean })
       className={`absolute inset-0 rounded-full bg-gradient-to-br ${data.colors.gradient} blur-3xl opacity-40`}
     />
 
-    {/* Image container */}
+    {/* Image container — circle is decorative, image floats over it */}
     <div
-      className="relative h-72 w-72 md:h-[400px] md:w-[400px] rounded-full shadow-2xl flex items-center justify-center overflow-hidden backdrop-blur-sm"
+      className="relative h-72 w-72 md:h-[420px] md:w-[420px] rounded-full shadow-2xl flex items-center justify-center backdrop-blur-sm"
       style={{
         background: 'rgba(10,16,32,0.55)',
         border: `1px solid ${data.colors.accent}22`,
@@ -213,18 +213,21 @@ const ProductVisual = ({ data, isLeft }: { data: ProductData; isLeft: boolean })
           initial="initial"
           animate="animate"
           exit="exit"
-          className="w-full h-full flex items-center justify-center"
+          className="absolute inset-0 flex items-center justify-center"
+          style={{ overflow: 'visible' }}
         >
           <motion.div
             animate={{ y: [-8, 8, -8] }}
             transition={{ repeat: Infinity, duration: 7, ease: 'easeInOut' }}
-            className="w-full h-full flex items-center justify-center p-6"
+            className="flex items-center justify-center"
+            style={{ width: '130%', overflow: 'visible' }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={data.image}
               alt={data.title}
-              className="w-full h-full object-contain drop-shadow-2xl"
+              className="w-full object-contain drop-shadow-2xl"
+              style={{ filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.6))' }}
               draggable={false}
             />
           </motion.div>
