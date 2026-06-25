@@ -1,1239 +1,793 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ótica Visão Clara – Enxergue o Mundo com Estilo</title>
+  <title>Ótica Visão Clara — Enxergue com Elegância</title>
+
+  <!-- ui-ux-pro-max: Cormorant + Montserrat (Luxury Serif pairing) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --navy:   #0d1b2a;
-      --gold:   #c9a84c;
-      --gold-lt:#e8c96d;
-      --cream:  #faf8f3;
-      --gray:   #6b7280;
-      --light:  #f3f4f6;
-      --white:  #ffffff;
-      --radius: 12px;
+    /* ui-ux-pro-max: prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
     }
 
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      color: var(--navy);
-      background: var(--white);
-      overflow-x: hidden;
+    /* Liquid Glass effect */
+    .glass {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+    .glass-light {
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(20px) saturate(200%);
+      -webkit-backdrop-filter: blur(20px) saturate(200%);
+      border: 1px solid rgba(255,255,255,0.9);
     }
 
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 6%;
-      background: rgba(13,27,42,0.92);
-      backdrop-filter: blur(10px);
-      transition: padding .3s;
+    /* Gold shimmer text */
+    .text-shimmer {
+      background: linear-gradient(90deg, #CA8A04 0%, #FACC15 30%, #CA8A04 60%, #EAB308 80%, #CA8A04 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 3s linear infinite;
     }
 
-    nav.scrolled { padding: 12px 6%; }
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .4s; }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
+    /* Morphing blob */
+    .blob {
+      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+      animation: morph 8s ease-in-out infinite;
+    }
+    @keyframes morph {
+      0%,100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+      25%      { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+      50%      { border-radius: 50% 60% 40% 70% / 40% 40% 60% 50%; }
+      75%      { border-radius: 40% 70% 60% 30% / 70% 30% 50% 40%; }
     }
 
-    .logo-icon {
-      width: 38px; height: 38px;
-      background: var(--gold);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-    }
-
-    .logo-icon svg { width: 22px; height: 22px; fill: var(--navy); }
-
-    .logo-text {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--white);
-      line-height: 1;
-    }
-
-    .logo-text span { color: var(--gold); }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 32px;
-    }
-
-    nav ul a {
-      color: rgba(255,255,255,.8);
-      text-decoration: none;
-      font-size: .9rem;
-      font-weight: 500;
-      letter-spacing: .02em;
-      transition: color .2s;
-    }
-
-    nav ul a:hover { color: var(--gold); }
-
-    .nav-cta {
-      background: var(--gold);
-      color: var(--navy) !important;
-      padding: 9px 22px;
-      border-radius: 50px;
-      font-weight: 600 !important;
-    }
-
-    .nav-cta:hover { background: var(--gold-lt) !important; color: var(--navy) !important; }
-
-    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
-    .hamburger span { display: block; width: 25px; height: 2px; background: var(--white); border-radius: 2px; }
-
-    /* HERO */
-    .hero {
-      min-height: 100vh;
-      background: linear-gradient(135deg, var(--navy) 0%, #1a3a5c 60%, #0d2236 100%);
-      display: flex;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-      padding: 100px 6% 60px;
-    }
-
-    .hero::before {
+    /* Noise texture overlay */
+    .noise::after {
       content: '';
       position: absolute;
-      top: -30%; right: -10%;
-      width: 700px; height: 700px;
-      background: radial-gradient(circle, rgba(201,168,76,.15) 0%, transparent 70%);
-      border-radius: 50%;
-    }
-
-    .hero-content {
-      flex: 1;
-      max-width: 560px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(201,168,76,.15);
-      border: 1px solid rgba(201,168,76,.4);
-      color: var(--gold);
-      font-size: .8rem;
-      font-weight: 600;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: 6px 16px;
-      border-radius: 50px;
-      margin-bottom: 24px;
-    }
-
-    .badge::before { content: '✦'; font-size: .7rem; }
-
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.4rem, 5vw, 3.8rem);
-      font-weight: 700;
-      line-height: 1.15;
-      color: var(--white);
-      margin-bottom: 20px;
-    }
-
-    h1 em { color: var(--gold); font-style: normal; }
-
-    .hero-desc {
-      font-size: 1.05rem;
-      color: rgba(255,255,255,.7);
-      line-height: 1.7;
-      margin-bottom: 36px;
-      max-width: 460px;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      background: var(--gold);
-      color: var(--navy);
-      padding: 14px 32px;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: .95rem;
-      text-decoration: none;
-      transition: transform .2s, background .2s, box-shadow .2s;
-      box-shadow: 0 4px 20px rgba(201,168,76,.4);
-    }
-
-    .btn-primary:hover {
-      background: var(--gold-lt);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(201,168,76,.5);
-    }
-
-    .btn-outline {
-      border: 2px solid rgba(255,255,255,.3);
-      color: var(--white);
-      padding: 14px 32px;
-      border-radius: 50px;
-      font-weight: 600;
-      font-size: .95rem;
-      text-decoration: none;
-      transition: .2s;
-    }
-
-    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
-
-    .hero-stats {
-      display: flex;
-      gap: 40px;
-      margin-top: 52px;
-    }
-
-    .stat strong {
-      display: block;
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--gold);
-      line-height: 1;
-    }
-
-    .stat small {
-      color: rgba(255,255,255,.55);
-      font-size: .8rem;
-      font-weight: 500;
-    }
-
-    .hero-image {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      z-index: 2;
-    }
-
-    .glasses-showcase {
-      position: relative;
-      width: 420px;
-      height: 420px;
-    }
-
-    .glasses-circle {
-      position: absolute;
       inset: 0;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, rgba(201,168,76,.12), rgba(13,27,42,.6));
-      border: 1px solid rgba(201,168,76,.2);
-    }
-
-    .glasses-svg-wrap {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* BRANDS */
-    .brands {
-      background: var(--cream);
-      padding: 28px 6%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 60px;
-      flex-wrap: wrap;
-      border-top: 1px solid #ede9df;
-      border-bottom: 1px solid #ede9df;
-    }
-
-    .brands p { color: var(--gray); font-size: .8rem; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; }
-
-    .brand-logos { display: flex; align-items: center; gap: 48px; flex-wrap: wrap; }
-
-    .brand-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #aaa;
-      letter-spacing: .05em;
-      transition: color .2s;
-      cursor: default;
-    }
-
-    .brand-logo:hover { color: var(--navy); }
-
-    /* SECTION COMMON */
-    section { padding: 90px 6%; }
-
-    .section-label {
-      display: inline-block;
-      color: var(--gold);
-      font-size: .78rem;
-      font-weight: 700;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.8rem, 3vw, 2.6rem);
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 16px;
-    }
-
-    .section-sub {
-      color: var(--gray);
-      font-size: 1rem;
-      line-height: 1.7;
-      max-width: 500px;
-    }
-
-    .text-center { text-align: center; }
-    .text-center .section-sub { margin: 0 auto; }
-
-    /* PRODUCTS */
-    .products { background: var(--white); }
-
-    .products-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 52px;
-    }
-
-    .filter-tabs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .tab {
-      padding: 8px 20px;
-      border-radius: 50px;
-      border: 1.5px solid #e5e7eb;
-      background: transparent;
-      font-size: .85rem;
-      font-weight: 500;
-      cursor: pointer;
-      color: var(--gray);
-      transition: .2s;
-    }
-
-    .tab.active, .tab:hover {
-      background: var(--navy);
-      border-color: var(--navy);
-      color: var(--white);
-    }
-
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 28px;
-    }
-
-    .product-card {
-      border-radius: var(--radius);
-      overflow: hidden;
-      border: 1px solid #f0f0f0;
-      transition: transform .25s, box-shadow .25s;
-      cursor: pointer;
-    }
-
-    .product-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 50px rgba(0,0,0,.1);
-    }
-
-    .product-img {
-      height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    .product-img svg { width: 160px; opacity: .85; }
-
-    .tag {
-      position: absolute;
-      top: 14px; left: 14px;
-      background: var(--navy);
-      color: var(--white);
-      font-size: .7rem;
-      font-weight: 700;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 50px;
-    }
-
-    .tag.sale { background: #ef4444; }
-    .tag.new  { background: var(--gold); color: var(--navy); }
-
-    .product-info { padding: 18px; }
-
-    .product-brand {
-      font-size: .75rem;
-      font-weight: 600;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 4px;
-    }
-
-    .product-name {
-      font-weight: 600;
-      font-size: 1rem;
-      margin-bottom: 12px;
-    }
-
-    .product-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .product-price {
-      font-size: 1.2rem;
-      font-weight: 700;
-    }
-
-    .product-price del {
-      font-size: .85rem;
-      font-weight: 400;
-      color: var(--gray);
-      margin-right: 6px;
-    }
-
-    .add-btn {
-      background: var(--navy);
-      color: var(--white);
-      border: none;
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      font-size: 1.3rem;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background .2s, transform .2s;
-    }
-
-    .add-btn:hover { background: var(--gold); transform: scale(1.1); }
-
-    /* SERVICES */
-    .services { background: var(--cream); }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 24px;
-      margin-top: 52px;
-    }
-
-    .service-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 32px 28px;
-      transition: transform .25s, box-shadow .25s;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 36px rgba(0,0,0,.08);
-    }
-
-    .service-icon {
-      width: 54px; height: 54px;
-      background: rgba(201,168,76,.12);
-      border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 20px;
-      font-size: 1.6rem;
-    }
-
-    .service-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .service-card p {
-      color: var(--gray);
-      font-size: .9rem;
-      line-height: 1.6;
-    }
-
-    /* HOW IT WORKS */
-    .how { background: var(--white); }
-
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-      margin-top: 52px;
-    }
-
-    .step { text-align: center; padding: 24px; }
-
-    .step-num {
-      width: 56px; height: 56px;
-      background: var(--navy);
-      color: var(--white);
-      font-size: 1.2rem;
-      font-weight: 800;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 20px;
-    }
-
-    .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
-    .step p  { color: var(--gray); font-size: .88rem; line-height: 1.6; }
-
-    /* TESTIMONIALS */
-    .testimonials { background: var(--navy); }
-
-    .testimonials .section-title { color: var(--white); }
-
-    .reviews-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 24px;
-      margin-top: 52px;
-    }
-
-    .review-card {
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: var(--radius);
-      padding: 28px;
-      transition: background .25s;
-    }
-
-    .review-card:hover { background: rgba(255,255,255,.1); }
-
-    .stars { color: var(--gold); font-size: 1rem; margin-bottom: 14px; }
-
-    .review-text {
-      color: rgba(255,255,255,.8);
-      font-size: .92rem;
-      line-height: 1.7;
-      margin-bottom: 20px;
-    }
-
-    .reviewer { display: flex; align-items: center; gap: 12px; }
-
-    .avatar {
-      width: 42px; height: 42px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--navy);
-    }
-
-    .reviewer-info strong { display: block; color: var(--white); font-size: .9rem; }
-    .reviewer-info small  { color: rgba(255,255,255,.45); font-size: .78rem; }
-
-    /* CTA BANNER */
-    .cta-banner {
-      background: linear-gradient(135deg, var(--gold) 0%, #b8892e 100%);
-      padding: 70px 6%;
-      text-align: center;
-    }
-
-    .cta-banner h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-      font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 14px;
-    }
-
-    .cta-banner p { color: rgba(13,27,42,.7); font-size: 1.05rem; margin-bottom: 32px; }
-
-    .btn-dark {
-      background: var(--navy);
-      color: var(--white);
-      padding: 15px 36px;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 1rem;
-      text-decoration: none;
-      display: inline-block;
-      transition: transform .2s, box-shadow .2s;
-      box-shadow: 0 6px 20px rgba(13,27,42,.3);
-    }
-
-    .btn-dark:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(13,27,42,.4); }
-
-    /* CONTACT */
-    .contact { background: var(--cream); }
-
-    .contact-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: start;
-    }
-
-    .contact-info h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
-
-    .contact-info p { color: var(--gray); line-height: 1.7; margin-bottom: 28px; }
-
-    .contact-details { display: flex; flex-direction: column; gap: 16px; }
-
-    .contact-detail { display: flex; align-items: flex-start; gap: 14px; }
-
-    .detail-icon {
-      width: 42px; height: 42px;
-      background: var(--white);
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,.06);
-    }
-
-    .detail-text strong { display: block; font-size: .85rem; font-weight: 600; margin-bottom: 2px; }
-    .detail-text span   { color: var(--gray); font-size: .85rem; }
-
-    .contact-form {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 36px;
-      box-shadow: 0 4px 24px rgba(0,0,0,.06);
-    }
-
-    .form-group { margin-bottom: 18px; }
-
-    .form-group label {
-      display: block;
-      font-size: .82rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: 12px 16px;
-      border: 1.5px solid #e5e7eb;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: .92rem;
-      color: var(--navy);
-      background: var(--white);
-      transition: border-color .2s;
-      outline: none;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus { border-color: var(--gold); }
-
-    .form-group textarea { resize: vertical; min-height: 100px; }
-
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-    .btn-submit {
-      width: 100%;
-      background: var(--navy);
-      color: var(--white);
-      border: none;
-      padding: 14px;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: .95rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background .2s, transform .2s;
-    }
-
-    .btn-submit:hover { background: #1a3a5c; transform: translateY(-1px); }
-
-    /* FOOTER */
-    footer {
-      background: var(--navy);
-      padding: 60px 6% 28px;
-      color: rgba(255,255,255,.6);
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 48px;
-      margin-bottom: 48px;
-    }
-
-    .footer-brand p { font-size: .88rem; line-height: 1.7; margin-top: 14px; margin-bottom: 20px; }
-
-    .social-links { display: flex; gap: 10px; }
-
-    .social-link {
-      width: 36px; height: 36px;
-      background: rgba(255,255,255,.08);
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      color: rgba(255,255,255,.7);
-      text-decoration: none;
-      font-size: .85rem;
-      font-weight: 700;
-      transition: background .2s, color .2s;
-    }
-
-    .social-link:hover { background: var(--gold); color: var(--navy); }
-
-    .footer-col h4 {
-      color: var(--white);
-      font-size: .9rem;
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
-
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-
-    .footer-col ul a {
-      color: rgba(255,255,255,.55);
-      text-decoration: none;
-      font-size: .85rem;
-      transition: color .2s;
-    }
-
-    .footer-col ul a:hover { color: var(--gold); }
-
-    .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,.08);
-      padding-top: 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: .8rem;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    /* ANIMATIONS */
-    .fade-up {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity .6s ease, transform .6s ease;
-    }
-    .fade-up.visible { opacity: 1; transform: translateY(0); }
-
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-      nav ul { display: none; }
-      .hamburger { display: flex; }
-      nav ul.open {
-        display: flex; flex-direction: column;
-        position: absolute; top: 100%; left: 0; right: 0;
-        background: var(--navy); padding: 20px 6%; gap: 16px;
-      }
-      .hero { flex-direction: column; text-align: center; gap: 40px; }
-      .hero-content { max-width: 100%; }
-      .hero-desc { max-width: 100%; }
-      .hero-buttons { justify-content: center; }
-      .hero-stats { justify-content: center; }
-      .glasses-showcase { width: 280px; height: 280px; }
-      .products-header { flex-direction: column; align-items: flex-start; gap: 20px; }
-      .contact-inner { grid-template-columns: 1fr; }
-      .footer-grid { grid-template-columns: 1fr 1fr; }
-    }
-
-    @media (max-width: 560px) {
-      section { padding: 60px 5%; }
-      .footer-grid { grid-template-columns: 1fr; }
-      .form-row { grid-template-columns: 1fr; }
-      .hero-stats { gap: 24px; }
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      border-radius: inherit;
     }
   </style>
 </head>
-<body>
 
-<!-- NAV -->
-<nav id="navbar">
-  <a href="#" class="logo">
-    <div class="logo-icon">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M1 12s3-7 11-7 11 7 11 7-3 7-11 7S1 12 1 12z"/>
-        <circle cx="12" cy="12" r="3"/>
-      </svg>
-    </div>
-    <div class="logo-text">Visão<span>Clara</span></div>
-  </a>
-  <ul id="navLinks">
-    <li><a href="#produtos">Produtos</a></li>
-    <li><a href="#servicos">Serviços</a></li>
-    <li><a href="#como-funciona">Como Funciona</a></li>
-    <li><a href="#depoimentos">Depoimentos</a></li>
-    <li><a href="#contato" class="nav-cta">Agendar Consulta</a></li>
-  </ul>
-  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </div>
-</nav>
+<body class="bg-stone-50 font-sans text-stone-900 overflow-x-hidden">
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-content">
-    <div class="badge">Nova Coleção 2026</div>
-    <h1>Enxergue o Mundo<br/>com <em>Estilo &amp; Clareza</em></h1>
-    <p class="hero-desc">
-      Armações exclusivas, lentes de alta tecnologia e atendimento especializado para cuidar da sua visão e da sua elegância.
-    </p>
-    <div class="hero-buttons">
-      <a href="#produtos" class="btn-primary">Ver Coleção</a>
-      <a href="#contato" class="btn-outline">Agendar Exame</a>
-    </div>
-    <div class="hero-stats">
-      <div class="stat"><strong>15k+</strong><small>Clientes satisfeitos</small></div>
-      <div class="stat"><strong>200+</strong><small>Modelos exclusivos</small></div>
-      <div class="stat"><strong>20 anos</strong><small>De experiência</small></div>
-    </div>
-  </div>
+  <!-- ══════════════════ NAV ══════════════════ -->
+  <header id="navbar" class="fixed top-3 left-4 right-4 z-50 transition-all duration-300">
+    <nav class="glass-light rounded-2xl px-5 py-3 flex items-center justify-between max-w-7xl mx-auto shadow-lg shadow-black/5">
 
-  <div class="hero-image">
-    <div class="glasses-showcase">
-      <div class="glasses-circle"></div>
-      <div class="glasses-svg-wrap">
-        <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" width="340">
-          <defs>
-            <radialGradient id="lensGrad" cx="50%" cy="40%">
-              <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.35"/>
-              <stop offset="100%" stop-color="#0d1b2a" stop-opacity="0.6"/>
-            </radialGradient>
-          </defs>
-          <ellipse cx="105" cy="90" rx="72" ry="60" fill="url(#lensGrad)" stroke="#c9a84c" stroke-width="3"/>
-          <ellipse cx="215" cy="90" rx="72" ry="60" fill="url(#lensGrad)" stroke="#c9a84c" stroke-width="3"/>
-          <path d="M177 88 Q160 78 143 88" fill="none" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="33" y1="68" x2="8" y2="72" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="287" y1="68" x2="312" y2="72" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
-          <ellipse cx="88" cy="72" rx="16" ry="10" fill="white" opacity="0.12" transform="rotate(-20 88 72)"/>
-          <ellipse cx="198" cy="72" rx="16" ry="10" fill="white" opacity="0.12" transform="rotate(-20 198 72)"/>
-        </svg>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- BRANDS -->
-<div class="brands">
-  <p>Marcas parceiras</p>
-  <div class="brand-logos">
-    <span class="brand-logo">Ray-Ban</span>
-    <span class="brand-logo">Oakley</span>
-    <span class="brand-logo">Prada</span>
-    <span class="brand-logo">Versace</span>
-    <span class="brand-logo">Hoya</span>
-  </div>
-</div>
-
-<!-- PRODUCTS -->
-<section class="products" id="produtos">
-  <div class="products-header">
-    <div>
-      <span class="section-label">Nossa Coleção</span>
-      <h2 class="section-title">Armações para Todo Estilo</h2>
-    </div>
-    <div class="filter-tabs">
-      <button class="tab active">Todos</button>
-      <button class="tab">Masculino</button>
-      <button class="tab">Feminino</button>
-      <button class="tab">Solar</button>
-      <button class="tab">Infantil</button>
-    </div>
-  </div>
-
-  <div class="products-grid">
-    <div class="product-card fade-up">
-      <div class="product-img" style="background:#eef2ff;">
-        <span class="tag new">Novo</span>
-        <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
-          <rect x="30" y="55" width="110" height="75" rx="22" fill="none" stroke="#4f46e5" stroke-width="4"/>
-          <rect x="180" y="55" width="110" height="75" rx="22" fill="none" stroke="#4f46e5" stroke-width="4"/>
-          <line x1="140" y1="88" x2="180" y2="88" stroke="#4f46e5" stroke-width="3"/>
-          <line x1="30" y1="72" x2="10" y2="68" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="290" y1="72" x2="310" y2="68" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="product-info">
-        <div class="product-brand">Premium</div>
-        <div class="product-name">Retangular Azul Clássico</div>
-        <div class="product-footer">
-          <div class="product-price">R$ 389,00</div>
-          <button class="add-btn">+</button>
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-2.5 cursor-pointer" aria-label="Visão Clara home">
+        <div class="w-8 h-8 rounded-full bg-stone-900 flex items-center justify-center flex-shrink-0">
+          <!-- Eye icon (SVG — Heroicons) -->
+          <svg class="w-4 h-4 text-gold-500" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
         </div>
-      </div>
-    </div>
-
-    <div class="product-card fade-up">
-      <div class="product-img" style="background:#fef3f2;">
-        <span class="tag sale">Oferta</span>
-        <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
-          <ellipse cx="105" cy="92" rx="68" ry="52" fill="none" stroke="#e11d48" stroke-width="4"/>
-          <ellipse cx="215" cy="92" rx="68" ry="52" fill="none" stroke="#e11d48" stroke-width="4"/>
-          <path d="M173 90 Q160 80 147 90" fill="none" stroke="#e11d48" stroke-width="2.5"/>
-          <line x1="37" y1="70" x2="12" y2="65" stroke="#e11d48" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="283" y1="70" x2="308" y2="65" stroke="#e11d48" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="product-info">
-        <div class="product-brand">Feminino</div>
-        <div class="product-name">Oval Vermelho Elegante</div>
-        <div class="product-footer">
-          <div class="product-price"><del>R$ 320,00</del> R$ 219,00</div>
-          <button class="add-btn">+</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="product-card fade-up">
-      <div class="product-img" style="background:#f0fdf4;">
-        <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
-          <rect x="28" y="60" width="108" height="68" rx="8" fill="none" stroke="#15803d" stroke-width="4"/>
-          <rect x="184" y="60" width="108" height="68" rx="8" fill="none" stroke="#15803d" stroke-width="4"/>
-          <line x1="136" y1="90" x2="184" y2="90" stroke="#15803d" stroke-width="3"/>
-          <line x1="28" y1="76" x2="8" y2="70" stroke="#15803d" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="292" y1="76" x2="312" y2="70" stroke="#15803d" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="product-info">
-        <div class="product-brand">Sport</div>
-        <div class="product-name">Quadrado Verde Urbano</div>
-        <div class="product-footer">
-          <div class="product-price">R$ 459,00</div>
-          <button class="add-btn">+</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="product-card fade-up">
-      <div class="product-img" style="background:#fffbeb;">
-        <span class="tag" style="background:var(--gold);color:var(--navy);">Top</span>
-        <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="solarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.5"/>
-              <stop offset="100%" stop-color="#b8892e" stop-opacity="0.8"/>
-            </linearGradient>
-          </defs>
-          <ellipse cx="105" cy="90" rx="72" ry="58" fill="url(#solarGrad)" stroke="#c9a84c" stroke-width="3.5"/>
-          <ellipse cx="215" cy="90" rx="72" ry="58" fill="url(#solarGrad)" stroke="#c9a84c" stroke-width="3.5"/>
-          <path d="M177 88 Q160 78 143 88" fill="none" stroke="#c9a84c" stroke-width="2.5"/>
-          <line x1="33" y1="68" x2="8" y2="72" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="287" y1="68" x2="312" y2="72" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="product-info">
-        <div class="product-brand">Solar · Ray-Ban</div>
-        <div class="product-name">Aviador Dourado Premium</div>
-        <div class="product-footer">
-          <div class="product-price">R$ 699,00</div>
-          <button class="add-btn">+</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SERVICES -->
-<section class="services" id="servicos">
-  <div class="text-center">
-    <span class="section-label">O Que Oferecemos</span>
-    <h2 class="section-title">Serviços Completos para Sua Visão</h2>
-    <p class="section-sub">Do exame à entrega das lentes, cuidamos de cada detalhe com tecnologia e atenção.</p>
-  </div>
-  <div class="services-grid">
-    <div class="service-card fade-up">
-      <div class="service-icon">👁️</div>
-      <h3>Exame de Vista Gratuito</h3>
-      <p>Avaliação completa realizada por optometristas certificados com equipamentos digitais de última geração.</p>
-    </div>
-    <div class="service-card fade-up">
-      <div class="service-icon">🔬</div>
-      <h3>Lentes de Alta Tecnologia</h3>
-      <p>Anti-reflexo, fotossensíveis, blue light, progressivas e muito mais. A lente certa para cada necessidade.</p>
-    </div>
-    <div class="service-card fade-up">
-      <div class="service-icon">⚡</div>
-      <h3>Entrega em 24 Horas</h3>
-      <p>Lentes simples prontas no mesmo dia. Itens especiais em até 24 horas sem custo adicional.</p>
-    </div>
-    <div class="service-card fade-up">
-      <div class="service-icon">🛡️</div>
-      <h3>Garantia Estendida</h3>
-      <p>12 meses de garantia em todas as armações e lentes, com troca facilitada em qualquer situação.</p>
-    </div>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="how" id="como-funciona">
-  <div class="text-center">
-    <span class="section-label">Simples e Rápido</span>
-    <h2 class="section-title">Como Funciona</h2>
-    <p class="section-sub">Em quatro passos simples você sai com a armação perfeita e as lentes ideais para você.</p>
-  </div>
-  <div class="steps">
-    <div class="step fade-up">
-      <div class="step-num">1</div>
-      <h3>Agende seu Exame</h3>
-      <p>Faça o agendamento online ou por telefone. Atendimento rápido sem filas de espera.</p>
-    </div>
-    <div class="step fade-up">
-      <div class="step-num">2</div>
-      <h3>Exame Completo</h3>
-      <p>Nossos especialistas realizam a avaliação e emitem a receita digital no momento.</p>
-    </div>
-    <div class="step fade-up">
-      <div class="step-num">3</div>
-      <h3>Escolha sua Armação</h3>
-      <p>Explore mais de 200 modelos e receba consultoria personalizada de estilo.</p>
-    </div>
-    <div class="step fade-up">
-      <div class="step-num">4</div>
-      <h3>Retire ou Receba</h3>
-      <p>Retire na loja ou receba em casa. Seus óculos chegam prontos, regulados e calibrados.</p>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="testimonials" id="depoimentos">
-  <div class="text-center">
-    <span class="section-label">Depoimentos</span>
-    <h2 class="section-title">O Que Nossos Clientes Dizem</h2>
-  </div>
-  <div class="reviews-grid">
-    <div class="review-card fade-up">
-      <div class="stars">★★★★★</div>
-      <p class="review-text">"Atendimento impecável do início ao fim. As lentes progressivas ficaram perfeitas e o preço foi muito justo. Recomendo para toda a família!"</p>
-      <div class="reviewer">
-        <div class="avatar" style="background:#fbbf24;">MF</div>
-        <div class="reviewer-info"><strong>Maria Fernanda S.</strong><small>Cliente desde 2020</small></div>
-      </div>
-    </div>
-    <div class="review-card fade-up">
-      <div class="stars">★★★★★</div>
-      <p class="review-text">"Comprei meus óculos de sol aviador e amei! A qualidade das lentes é excelente e a armação dourada ficou incrível. Entrega rápidíssima."</p>
-      <div class="reviewer">
-        <div class="avatar" style="background:#34d399;">RC</div>
-        <div class="reviewer-info"><strong>Rafael Costa</strong><small>Cliente desde 2022</small></div>
-      </div>
-    </div>
-    <div class="review-card fade-up">
-      <div class="stars">★★★★★</div>
-      <p class="review-text">"Fiz o exame gratuito e em menos de 2 horas saí da loja com meus óculos novos. A equipe é muito profissional e atenciosa. Voltarei com certeza!"</p>
-      <div class="reviewer">
-        <div class="avatar" style="background:#f87171;">AP</div>
-        <div class="reviewer-info"><strong>Ana Paula M.</strong><small>Cliente desde 2021</small></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA BANNER -->
-<div class="cta-banner">
-  <h2>Exame de Vista 100% Gratuito</h2>
-  <p>Agende hoje e ganhe desconto especial na sua primeira compra. Vagas limitadas!</p>
-  <a href="#contato" class="btn-dark">Agendar Agora</a>
-</div>
-
-<!-- CONTACT -->
-<section class="contact" id="contato">
-  <div class="contact-inner">
-    <div class="contact-info">
-      <span class="section-label">Fale Conosco</span>
-      <h3>Agende sua Consulta</h3>
-      <p>Nossa equipe está pronta para te atender. Preencha o formulário ou entre em contato diretamente pelos nossos canais.</p>
-      <div class="contact-details">
-        <div class="contact-detail">
-          <div class="detail-icon">📍</div>
-          <div class="detail-text">
-            <strong>Endereço</strong>
-            <span>Av. Paulista, 1500 – Bela Vista, São Paulo/SP</span>
-          </div>
-        </div>
-        <div class="contact-detail">
-          <div class="detail-icon">📞</div>
-          <div class="detail-text">
-            <strong>Telefone / WhatsApp</strong>
-            <span>(11) 99999-8888</span>
-          </div>
-        </div>
-        <div class="contact-detail">
-          <div class="detail-icon">🕐</div>
-          <div class="detail-text">
-            <strong>Horário de Funcionamento</strong>
-            <span>Seg–Sex: 9h–19h · Sáb: 9h–17h</span>
-          </div>
-        </div>
-        <div class="contact-detail">
-          <div class="detail-icon">✉️</div>
-          <div class="detail-text">
-            <strong>E-mail</strong>
-            <span>contato@visaoclara.com.br</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <form class="contact-form" onsubmit="handleSubmit(event)">
-      <div class="form-row">
-        <div class="form-group">
-          <label>Nome</label>
-          <input type="text" placeholder="Seu nome completo" required />
-        </div>
-        <div class="form-group">
-          <label>Telefone</label>
-          <input type="tel" placeholder="(11) 99999-9999" />
-        </div>
-      </div>
-      <div class="form-group">
-        <label>E-mail</label>
-        <input type="email" placeholder="seu@email.com" required />
-      </div>
-      <div class="form-group">
-        <label>Serviço desejado</label>
-        <select>
-          <option value="">Selecione…</option>
-          <option>Exame de Vista</option>
-          <option>Compra de Armação</option>
-          <option>Troca de Lentes</option>
-          <option>Manutenção / Ajuste</option>
-          <option>Outro</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Mensagem (opcional)</label>
-        <textarea placeholder="Conte-nos como podemos ajudar…"></textarea>
-      </div>
-      <button type="submit" class="btn-submit">Enviar Agendamento →</button>
-    </form>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <a href="#" class="logo">
-        <div class="logo-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M1 12s3-7 11-7 11 7 11 7-3 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
-        </div>
-        <div class="logo-text" style="color:white;">Visão<span>Clara</span></div>
+        <span class="font-serif text-xl font-semibold text-stone-900 leading-none">Visão<span class="text-gold-600">Clara</span></span>
       </a>
-      <p>Sua ótica de confiança há mais de 20 anos. Cuidando da sua visão com tecnologia, estilo e carinho.</p>
-      <div class="social-links">
-        <a href="#" class="social-link">f</a>
-        <a href="#" class="social-link">in</a>
-        <a href="#" class="social-link">ig</a>
-        <a href="#" class="social-link">yt</a>
+
+      <!-- Desktop links -->
+      <ul class="hidden md:flex items-center gap-8" role="list">
+        <li><a href="#colecao" class="font-sans text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors duration-200 cursor-pointer">Coleção</a></li>
+        <li><a href="#servicos" class="font-sans text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors duration-200 cursor-pointer">Serviços</a></li>
+        <li><a href="#depoimentos" class="font-sans text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors duration-200 cursor-pointer">Depoimentos</a></li>
+        <li><a href="#contato" class="font-sans text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors duration-200 cursor-pointer">Contato</a></li>
+      </ul>
+
+      <!-- CTA -->
+      <div class="flex items-center gap-3">
+        <a href="#contato" class="hidden sm:inline-flex items-center gap-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-stone-900/20 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-2">
+          Agendar Exame
+        </a>
+        <!-- Hamburger (mobile) -->
+        <button id="menu-btn" class="md:hidden w-10 h-10 flex items-center justify-center rounded-xl hover:bg-stone-100 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu">
+          <svg id="icon-open" class="w-5 h-5 text-stone-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg id="icon-close" class="w-5 h-5 text-stone-700 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden mt-2 glass-light rounded-2xl px-5 py-4 max-w-7xl mx-auto shadow-lg">
+      <ul class="flex flex-col gap-4" role="list">
+        <li><a href="#colecao"     class="block text-sm font-medium text-stone-700 hover:text-stone-900 transition-colors cursor-pointer py-1">Coleção</a></li>
+        <li><a href="#servicos"    class="block text-sm font-medium text-stone-700 hover:text-stone-900 transition-colors cursor-pointer py-1">Serviços</a></li>
+        <li><a href="#depoimentos" class="block text-sm font-medium text-stone-700 hover:text-stone-900 transition-colors cursor-pointer py-1">Depoimentos</a></li>
+        <li><a href="#contato"     class="block text-sm font-medium text-stone-700 hover:text-stone-900 transition-colors cursor-pointer py-1">Contato</a></li>
+        <li><a href="#contato"     class="inline-flex bg-stone-900 text-white text-sm font-semibold px-5 py-2.5 rounded-xl cursor-pointer transition-colors hover:bg-stone-800">Agendar Exame</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ══════════════════ HERO ══════════════════ -->
+    <section class="relative min-h-screen flex items-center overflow-hidden bg-stone-900 noise pt-24 pb-16">
+
+      <!-- Background blobs (Liquid Glass morphing) -->
+      <div class="absolute top-1/4 -left-32 w-[500px] h-[500px] blob opacity-20" style="background:radial-gradient(circle, #CA8A04 0%, transparent 70%);" aria-hidden="true"></div>
+      <div class="absolute bottom-0 right-0 w-[600px] h-[600px] blob opacity-10" style="background:radial-gradient(circle, #EAB308 0%, transparent 65%); animation-delay:-4s;" aria-hidden="true"></div>
+
+      <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid lg:grid-cols-2 gap-12 items-center">
+
+        <!-- Text -->
+        <div>
+          <p class="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-5 animate-fade-in">Nova Coleção 2026</p>
+          <h1 class="font-serif text-5xl sm:text-6xl lg:text-7xl font-semibold leading-[1.1] text-white mb-6">
+            Visão que<br/>
+            <em class="not-italic text-shimmer">transforma</em><br/>
+            perspectivas
+          </h1>
+          <p class="font-sans text-base font-light text-stone-400 leading-relaxed mb-10 max-w-md">
+            Armações exclusivas e lentes de alta tecnologia para quem enxerga o mundo com distinção. Mais de 20 anos cuidando do seu olhar.
+          </p>
+
+          <div class="flex flex-wrap gap-4 mb-14">
+            <a href="#colecao" class="inline-flex items-center gap-2 bg-gold-600 hover:bg-gold-500 text-white font-semibold text-sm px-7 py-3.5 rounded-xl transition-all duration-200 hover:shadow-xl hover:shadow-gold-600/30 hover:-translate-y-0.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-500 focus:ring-offset-2 focus:ring-offset-stone-900">
+              Ver Coleção
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+            <a href="#contato" class="inline-flex items-center gap-2 border border-stone-600 hover:border-stone-400 text-stone-300 hover:text-white font-semibold text-sm px-7 py-3.5 rounded-xl transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-400 focus:ring-offset-2 focus:ring-offset-stone-900">
+              Agendar Exame Grátis
+            </a>
+          </div>
+
+          <!-- Stats -->
+          <div class="flex gap-8 sm:gap-12">
+            <div>
+              <p class="font-serif text-3xl font-semibold text-white">15k<span class="text-gold-500">+</span></p>
+              <p class="font-sans text-xs text-stone-500 mt-0.5 font-medium uppercase tracking-wide">Clientes</p>
+            </div>
+            <div class="border-l border-stone-800 pl-8 sm:pl-12">
+              <p class="font-serif text-3xl font-semibold text-white">200<span class="text-gold-500">+</span></p>
+              <p class="font-sans text-xs text-stone-500 mt-0.5 font-medium uppercase tracking-wide">Modelos</p>
+            </div>
+            <div class="border-l border-stone-800 pl-8 sm:pl-12">
+              <p class="font-serif text-3xl font-semibold text-white">20<span class="text-gold-500"> anos</span></p>
+              <p class="font-sans text-xs text-stone-500 mt-0.5 font-medium uppercase tracking-wide">Experiência</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero visual: liquid glass frames -->
+        <div class="relative flex items-center justify-center animate-float lg:justify-end" aria-hidden="true">
+          <div class="relative w-[340px] h-[340px] sm:w-[420px] sm:h-[420px]">
+            <!-- Glow -->
+            <div class="absolute inset-8 rounded-full bg-gold-600/20 blur-3xl"></div>
+            <!-- Glass card -->
+            <div class="absolute inset-0 glass rounded-3xl flex items-center justify-center">
+              <svg viewBox="0 0 380 220" class="w-72 sm:w-80" role="img" aria-label="Óculos aviador dourado">
+                <defs>
+                  <radialGradient id="lg1" cx="40%" cy="35%">
+                    <stop offset="0%" stop-color="#CA8A04" stop-opacity=".45"/>
+                    <stop offset="100%" stop-color="#1C1917" stop-opacity=".75"/>
+                  </radialGradient>
+                  <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="blur"/>
+                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+                <!-- Lente esquerda -->
+                <ellipse cx="120" cy="110" rx="90" ry="72" fill="url(#lg1)" stroke="#CA8A04" stroke-width="2.5" filter="url(#glow)"/>
+                <!-- Lente direita -->
+                <ellipse cx="260" cy="110" rx="90" ry="72" fill="url(#lg1)" stroke="#CA8A04" stroke-width="2.5" filter="url(#glow)"/>
+                <!-- Ponte -->
+                <path d="M210 108 Q190 95 170 108" fill="none" stroke="#CA8A04" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- Hastes -->
+                <line x1="30" y1="85" x2="5" y2="90" stroke="#CA8A04" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="350" y1="85" x2="375" y2="90" stroke="#CA8A04" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- Reflexo -->
+                <ellipse cx="100" cy="88" rx="20" ry="12" fill="white" opacity=".12" transform="rotate(-18 100 88)"/>
+                <ellipse cx="240" cy="88" rx="20" ry="12" fill="white" opacity=".12" transform="rotate(-18 240 88)"/>
+              </svg>
+            </div>
+            <!-- Floating badge -->
+            <div class="absolute -bottom-4 -right-4 glass rounded-2xl px-4 py-3 shadow-xl">
+              <p class="font-sans text-xs text-stone-300 font-medium">Exame</p>
+              <p class="font-serif text-lg font-semibold text-gold-400 leading-tight">Gratuito</p>
+            </div>
+            <div class="absolute -top-4 -left-4 glass rounded-2xl px-4 py-3 shadow-xl">
+              <p class="font-sans text-xs text-stone-300 font-medium">Coleção</p>
+              <p class="font-serif text-lg font-semibold text-gold-400 leading-tight">2026</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40" aria-hidden="true">
+        <p class="font-sans text-xs tracking-widest text-stone-400 uppercase">Scroll</p>
+        <div class="w-px h-10 bg-gradient-to-b from-stone-400 to-transparent"></div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ BRANDS ══════════════════ -->
+    <section class="bg-stone-100 border-y border-stone-200 py-6 overflow-hidden" aria-label="Marcas parceiras">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-center gap-6 sm:gap-12">
+        <p class="font-sans text-xs font-semibold tracking-[0.15em] uppercase text-stone-400">Marcas</p>
+        <div class="flex flex-wrap items-center gap-8 sm:gap-14">
+          <span class="font-serif text-base font-semibold text-stone-300 hover:text-stone-600 transition-colors cursor-default select-none">Ray-Ban</span>
+          <span class="font-serif text-base font-semibold text-stone-300 hover:text-stone-600 transition-colors cursor-default select-none">Oakley</span>
+          <span class="font-serif text-base font-semibold text-stone-300 hover:text-stone-600 transition-colors cursor-default select-none">Prada</span>
+          <span class="font-serif text-base font-semibold text-stone-300 hover:text-stone-600 transition-colors cursor-default select-none">Versace</span>
+          <span class="font-serif text-base font-semibold text-stone-300 hover:text-stone-600 transition-colors cursor-default select-none">Hoya</span>
+          <span class="font-serif text-base font-semibold text-stone-300 hover:text-stone-600 transition-colors cursor-default select-none">Transitions</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ COLEÇÃO ══════════════════ -->
+    <section id="colecao" class="py-24 bg-stone-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 reveal">
+          <div>
+            <p class="font-sans text-xs font-semibold tracking-[0.18em] uppercase text-gold-600 mb-3">Nossa Coleção</p>
+            <h2 class="font-serif text-4xl sm:text-5xl font-semibold text-stone-900">Armações para<br/><em class="not-italic text-stone-500">todo estilo</em></h2>
+          </div>
+          <!-- Filter tabs -->
+          <div class="flex gap-2 flex-wrap" role="tablist" aria-label="Filtrar coleção">
+            <button role="tab" aria-selected="true"  class="tab-btn active font-sans text-xs font-semibold px-4 py-2 rounded-lg border transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-1">Todos</button>
+            <button role="tab" aria-selected="false" class="tab-btn font-sans text-xs font-semibold px-4 py-2 rounded-lg border transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-1">Masculino</button>
+            <button role="tab" aria-selected="false" class="tab-btn font-sans text-xs font-semibold px-4 py-2 rounded-lg border transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-1">Feminino</button>
+            <button role="tab" aria-selected="false" class="tab-btn font-sans text-xs font-semibold px-4 py-2 rounded-lg border transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-1">Solar</button>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <!-- Card 1 -->
+          <article class="group bg-white rounded-2xl overflow-hidden border border-stone-200 hover:border-stone-300 hover:shadow-xl hover:shadow-stone-200/80 transition-all duration-300 cursor-pointer reveal reveal-delay-1">
+            <div class="h-52 bg-indigo-50 flex items-center justify-center relative overflow-hidden">
+              <span class="absolute top-3 left-3 font-sans text-[10px] font-bold tracking-widest uppercase bg-gold-600 text-white px-2.5 py-1 rounded-full">Novo</span>
+              <svg viewBox="0 0 320 180" class="w-44 group-hover:scale-105 transition-transform duration-500" aria-label="Armação retangular azul">
+                <rect x="28" y="52" width="115" height="78" rx="20" fill="none" stroke="#4f46e5" stroke-width="4"/>
+                <rect x="178" y="52" width="115" height="78" rx="20" fill="none" stroke="#4f46e5" stroke-width="4"/>
+                <line x1="143" y1="88" x2="178" y2="88" stroke="#4f46e5" stroke-width="3.5"/>
+                <line x1="28"  y1="68" x2="6"   y2="63" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="293" y1="68" x2="314" y2="63" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="p-5">
+              <p class="font-sans text-[10px] font-bold tracking-[0.14em] uppercase text-gold-600 mb-1">Premium</p>
+              <h3 class="font-serif text-lg font-semibold text-stone-900 mb-4">Retangular Azul Clássico</h3>
+              <div class="flex items-center justify-between">
+                <p class="font-sans text-xl font-semibold text-stone-900">R$ 389</p>
+                <button class="w-9 h-9 rounded-full bg-stone-900 hover:bg-gold-600 text-white flex items-center justify-center transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-1" aria-label="Adicionar ao carrinho">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="group bg-white rounded-2xl overflow-hidden border border-stone-200 hover:border-stone-300 hover:shadow-xl hover:shadow-stone-200/80 transition-all duration-300 cursor-pointer reveal reveal-delay-2">
+            <div class="h-52 bg-rose-50 flex items-center justify-center relative overflow-hidden">
+              <span class="absolute top-3 left-3 font-sans text-[10px] font-bold tracking-widest uppercase bg-red-500 text-white px-2.5 py-1 rounded-full">Oferta</span>
+              <svg viewBox="0 0 320 180" class="w-44 group-hover:scale-105 transition-transform duration-500" aria-label="Armação oval vermelha">
+                <ellipse cx="105" cy="92" rx="70" ry="55" fill="none" stroke="#e11d48" stroke-width="4"/>
+                <ellipse cx="215" cy="92" rx="70" ry="55" fill="none" stroke="#e11d48" stroke-width="4"/>
+                <path d="M175 90 Q160 80 145 90" fill="none" stroke="#e11d48" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="35"  y1="68" x2="10"  y2="63" stroke="#e11d48" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="285" y1="68" x2="310" y2="63" stroke="#e11d48" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="p-5">
+              <p class="font-sans text-[10px] font-bold tracking-[0.14em] uppercase text-gold-600 mb-1">Feminino</p>
+              <h3 class="font-serif text-lg font-semibold text-stone-900 mb-4">Oval Vermelho Elegante</h3>
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="font-sans text-sm text-stone-400 line-through leading-none">R$ 320</p>
+                  <p class="font-sans text-xl font-semibold text-stone-900">R$ 219</p>
+                </div>
+                <button class="w-9 h-9 rounded-full bg-stone-900 hover:bg-gold-600 text-white flex items-center justify-center transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-1" aria-label="Adicionar ao carrinho">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="group bg-white rounded-2xl overflow-hidden border border-stone-200 hover:border-stone-300 hover:shadow-xl hover:shadow-stone-200/80 transition-all duration-300 cursor-pointer reveal reveal-delay-3">
+            <div class="h-52 bg-emerald-50 flex items-center justify-center relative overflow-hidden">
+              <svg viewBox="0 0 320 180" class="w-44 group-hover:scale-105 transition-transform duration-500" aria-label="Armação quadrada verde">
+                <rect x="26" y="58" width="112" height="70" rx="8" fill="none" stroke="#15803d" stroke-width="4"/>
+                <rect x="182" y="58" width="112" height="70" rx="8" fill="none" stroke="#15803d" stroke-width="4"/>
+                <line x1="138" y1="90" x2="182" y2="90" stroke="#15803d" stroke-width="3.5"/>
+                <line x1="26"  y1="74" x2="6"   y2="68" stroke="#15803d" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="294" y1="74" x2="314" y2="68" stroke="#15803d" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="p-5">
+              <p class="font-sans text-[10px] font-bold tracking-[0.14em] uppercase text-gold-600 mb-1">Sport</p>
+              <h3 class="font-serif text-lg font-semibold text-stone-900 mb-4">Quadrado Verde Urbano</h3>
+              <div class="flex items-center justify-between">
+                <p class="font-sans text-xl font-semibold text-stone-900">R$ 459</p>
+                <button class="w-9 h-9 rounded-full bg-stone-900 hover:bg-gold-600 text-white flex items-center justify-center transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-1" aria-label="Adicionar ao carrinho">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 4 -->
+          <article class="group bg-white rounded-2xl overflow-hidden border border-stone-200 hover:border-stone-300 hover:shadow-xl hover:shadow-stone-200/80 transition-all duration-300 cursor-pointer reveal reveal-delay-4">
+            <div class="h-52 bg-amber-50 flex items-center justify-center relative overflow-hidden">
+              <span class="absolute top-3 left-3 font-sans text-[10px] font-bold tracking-widest uppercase bg-stone-900 text-gold-400 px-2.5 py-1 rounded-full">Top</span>
+              <svg viewBox="0 0 320 180" class="w-44 group-hover:scale-105 transition-transform duration-500" aria-label="Óculos aviador dourado solar">
+                <defs>
+                  <linearGradient id="goldG" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#CA8A04" stop-opacity=".6"/>
+                    <stop offset="100%" stop-color="#92400e" stop-opacity=".85"/>
+                  </linearGradient>
+                </defs>
+                <ellipse cx="105" cy="92" rx="74" ry="60" fill="url(#goldG)" stroke="#CA8A04" stroke-width="3.5"/>
+                <ellipse cx="215" cy="92" rx="74" ry="60" fill="url(#goldG)" stroke="#CA8A04" stroke-width="3.5"/>
+                <path d="M179 90 Q162 79 145 90" fill="none" stroke="#CA8A04" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="31"  y1="70" x2="6"   y2="75" stroke="#CA8A04" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="289" y1="70" x2="314" y2="75" stroke="#CA8A04" stroke-width="2.5" stroke-linecap="round"/>
+                <ellipse cx="88"  cy="74" rx="18" ry="11" fill="white" opacity=".14" transform="rotate(-20 88 74)"/>
+                <ellipse cx="198" cy="74" rx="18" ry="11" fill="white" opacity=".14" transform="rotate(-20 198 74)"/>
+              </svg>
+            </div>
+            <div class="p-5">
+              <p class="font-sans text-[10px] font-bold tracking-[0.14em] uppercase text-gold-600 mb-1">Solar · Ray-Ban</p>
+              <h3 class="font-serif text-lg font-semibold text-stone-900 mb-4">Aviador Dourado Premium</h3>
+              <div class="flex items-center justify-between">
+                <p class="font-sans text-xl font-semibold text-stone-900">R$ 699</p>
+                <button class="w-9 h-9 rounded-full bg-stone-900 hover:bg-gold-600 text-white flex items-center justify-center transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-1" aria-label="Adicionar ao carrinho">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                </button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ SERVIÇOS ══════════════════ -->
+    <section id="servicos" class="py-24 bg-stone-900 relative overflow-hidden">
+      <div class="absolute inset-0" aria-hidden="true">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gold-600/5 blur-3xl rounded-full"></div>
+      </div>
+      <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+          <p class="font-sans text-xs font-semibold tracking-[0.18em] uppercase text-gold-500 mb-3">O Que Oferecemos</p>
+          <h2 class="font-serif text-4xl sm:text-5xl font-semibold text-white">Serviços completos<br/><em class="not-italic text-stone-400">para sua visão</em></h2>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+          <div class="glass rounded-2xl p-7 hover:bg-white/10 transition-all duration-300 cursor-default reveal reveal-delay-1">
+            <div class="w-12 h-12 rounded-xl bg-gold-600/20 flex items-center justify-center mb-5">
+              <!-- Eye check icon (SVG) -->
+              <svg class="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <h3 class="font-serif text-lg font-semibold text-white mb-2">Exame de Vista Gratuito</h3>
+            <p class="font-sans text-sm text-stone-400 leading-relaxed">Avaliação completa por optometristas certificados com equipamentos de última geração.</p>
+          </div>
+
+          <div class="glass rounded-2xl p-7 hover:bg-white/10 transition-all duration-300 cursor-default reveal reveal-delay-2">
+            <div class="w-12 h-12 rounded-xl bg-gold-600/20 flex items-center justify-center mb-5">
+              <!-- Sparkles / lens icon -->
+              <svg class="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/>
+              </svg>
+            </div>
+            <h3 class="font-serif text-lg font-semibold text-white mb-2">Lentes de Alta Tecnologia</h3>
+            <p class="font-sans text-sm text-stone-400 leading-relaxed">Anti-reflexo, fotossensível, blue light, progressiva e muito mais para cada necessidade.</p>
+          </div>
+
+          <div class="glass rounded-2xl p-7 hover:bg-white/10 transition-all duration-300 cursor-default reveal reveal-delay-3">
+            <div class="w-12 h-12 rounded-xl bg-gold-600/20 flex items-center justify-center mb-5">
+              <!-- Bolt / speed icon -->
+              <svg class="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>
+              </svg>
+            </div>
+            <h3 class="font-serif text-lg font-semibold text-white mb-2">Entrega em 24 Horas</h3>
+            <p class="font-sans text-sm text-stone-400 leading-relaxed">Lentes simples prontas no dia. Itens especiais entregues em até 24 horas sem custo extra.</p>
+          </div>
+
+          <div class="glass rounded-2xl p-7 hover:bg-white/10 transition-all duration-300 cursor-default reveal reveal-delay-4">
+            <div class="w-12 h-12 rounded-xl bg-gold-600/20 flex items-center justify-center mb-5">
+              <!-- Shield check icon -->
+              <svg class="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
+              </svg>
+            </div>
+            <h3 class="font-serif text-lg font-semibold text-white mb-2">Garantia Estendida</h3>
+            <p class="font-sans text-sm text-stone-400 leading-relaxed">12 meses de garantia em todas as armações e lentes, com troca facilitada.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ COMO FUNCIONA ══════════════════ -->
+    <section class="py-24 bg-stone-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+          <p class="font-sans text-xs font-semibold tracking-[0.18em] uppercase text-gold-600 mb-3">Simples e Rápido</p>
+          <h2 class="font-serif text-4xl sm:text-5xl font-semibold text-stone-900">Como funciona</h2>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="text-center reveal reveal-delay-1">
+            <div class="w-14 h-14 rounded-2xl bg-stone-900 text-white font-serif text-2xl font-semibold flex items-center justify-center mx-auto mb-5">1</div>
+            <h3 class="font-serif text-lg font-semibold text-stone-900 mb-2">Agende seu Exame</h3>
+            <p class="font-sans text-sm text-stone-500 leading-relaxed">Online ou por telefone, rápido e sem filas.</p>
+          </div>
+          <div class="text-center reveal reveal-delay-2">
+            <div class="w-14 h-14 rounded-2xl bg-stone-900 text-white font-serif text-2xl font-semibold flex items-center justify-center mx-auto mb-5">2</div>
+            <h3 class="font-serif text-lg font-semibold text-stone-900 mb-2">Exame Completo</h3>
+            <p class="font-sans text-sm text-stone-500 leading-relaxed">Especialistas emitem a receita digital na hora.</p>
+          </div>
+          <div class="text-center reveal reveal-delay-3">
+            <div class="w-14 h-14 rounded-2xl bg-stone-900 text-white font-serif text-2xl font-semibold flex items-center justify-center mx-auto mb-5">3</div>
+            <h3 class="font-serif text-lg font-semibold text-stone-900 mb-2">Escolha sua Armação</h3>
+            <p class="font-sans text-sm text-stone-500 leading-relaxed">+200 modelos com consultoria personalizada de estilo.</p>
+          </div>
+          <div class="text-center reveal reveal-delay-4">
+            <div class="w-14 h-14 rounded-2xl bg-stone-900 text-white font-serif text-2xl font-semibold flex items-center justify-center mx-auto mb-5">4</div>
+            <h3 class="font-serif text-lg font-semibold text-stone-900 mb-2">Retire ou Receba</h3>
+            <p class="font-sans text-sm text-stone-500 leading-relaxed">Seus óculos chegam prontos, regulados e calibrados.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ DEPOIMENTOS ══════════════════ -->
+    <section id="depoimentos" class="py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+          <p class="font-sans text-xs font-semibold tracking-[0.18em] uppercase text-gold-600 mb-3">Depoimentos</p>
+          <h2 class="font-serif text-4xl sm:text-5xl font-semibold text-stone-900">O que nossos<br/><em class="not-italic text-stone-400">clientes dizem</em></h2>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-6">
+
+          <blockquote class="bg-stone-50 rounded-2xl p-7 border border-stone-100 hover:shadow-lg hover:shadow-stone-100 transition-all duration-300 cursor-default reveal reveal-delay-1">
+            <div class="flex gap-0.5 mb-4" aria-label="5 de 5 estrelas">
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            </div>
+            <p class="font-sans text-sm text-stone-600 leading-relaxed mb-6">"Atendimento impecável do início ao fim. As lentes progressivas ficaram perfeitas e o preço foi muito justo. Recomendo para toda a família!"</p>
+            <footer class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-amber-200 flex items-center justify-center font-sans text-sm font-bold text-amber-800 flex-shrink-0" aria-hidden="true">MF</div>
+              <div>
+                <p class="font-sans text-sm font-semibold text-stone-900">Maria Fernanda S.</p>
+                <p class="font-sans text-xs text-stone-400">Cliente desde 2020</p>
+              </div>
+            </footer>
+          </blockquote>
+
+          <blockquote class="bg-stone-50 rounded-2xl p-7 border border-stone-100 hover:shadow-lg hover:shadow-stone-100 transition-all duration-300 cursor-default reveal reveal-delay-2">
+            <div class="flex gap-0.5 mb-4" aria-label="5 de 5 estrelas">
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            </div>
+            <p class="font-sans text-sm text-stone-600 leading-relaxed mb-6">"Comprei meu aviador dourado e amei! Qualidade incrível, entrega rápida e a equipe super atenciosa. Com certeza vou voltar!"</p>
+            <footer class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-emerald-200 flex items-center justify-center font-sans text-sm font-bold text-emerald-800 flex-shrink-0" aria-hidden="true">RC</div>
+              <div>
+                <p class="font-sans text-sm font-semibold text-stone-900">Rafael Costa</p>
+                <p class="font-sans text-xs text-stone-400">Cliente desde 2022</p>
+              </div>
+            </footer>
+          </blockquote>
+
+          <blockquote class="bg-stone-50 rounded-2xl p-7 border border-stone-100 hover:shadow-lg hover:shadow-stone-100 transition-all duration-300 cursor-default reveal reveal-delay-3">
+            <div class="flex gap-0.5 mb-4" aria-label="5 de 5 estrelas">
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            </div>
+            <p class="font-sans text-sm text-stone-600 leading-relaxed mb-6">"Fiz o exame gratuito e em menos de 2 horas saí com meus óculos novos. Equipe profissional e atenciosa. Voltarei com certeza!"</p>
+            <footer class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-rose-200 flex items-center justify-center font-sans text-sm font-bold text-rose-800 flex-shrink-0" aria-hidden="true">AP</div>
+              <div>
+                <p class="font-sans text-sm font-semibold text-stone-900">Ana Paula M.</p>
+                <p class="font-sans text-xs text-stone-400">Cliente desde 2021</p>
+              </div>
+            </footer>
+          </blockquote>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ CTA BANNER ══════════════════ -->
+    <section class="relative overflow-hidden bg-stone-900 py-24 noise">
+      <div class="absolute inset-0" aria-hidden="true">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] rounded-full bg-gold-600/10 blur-3xl"></div>
+      </div>
+      <div class="relative z-10 max-w-3xl mx-auto text-center px-4 sm:px-6 reveal">
+        <p class="font-sans text-xs font-semibold tracking-[0.18em] uppercase text-gold-500 mb-4">Oferta Exclusiva</p>
+        <h2 class="font-serif text-4xl sm:text-5xl font-semibold text-white mb-5">Exame de Vista<br/><em class="not-italic text-shimmer">100% Gratuito</em></h2>
+        <p class="font-sans text-base text-stone-400 mb-10 leading-relaxed">Agende hoje e ganhe desconto especial na sua primeira compra. Vagas limitadas para este mês.</p>
+        <a href="#contato" class="inline-flex items-center gap-2 bg-gold-600 hover:bg-gold-500 text-white font-semibold text-sm px-9 py-4 rounded-xl transition-all duration-200 hover:shadow-2xl hover:shadow-gold-600/30 hover:-translate-y-0.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-500 focus:ring-offset-2 focus:ring-offset-stone-900">
+          Agendar Agora — É Grátis
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- ══════════════════ CONTATO ══════════════════ -->
+    <section id="contato" class="py-24 bg-stone-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-16 items-start">
+
+        <!-- Info -->
+        <div class="reveal">
+          <p class="font-sans text-xs font-semibold tracking-[0.18em] uppercase text-gold-600 mb-3">Fale Conosco</p>
+          <h2 class="font-serif text-4xl sm:text-5xl font-semibold text-stone-900 mb-5">Agende sua<br/><em class="not-italic text-stone-400">consulta</em></h2>
+          <p class="font-sans text-sm text-stone-500 leading-relaxed mb-10 max-w-sm">Nossa equipe está pronta para te atender. Preencha o formulário ou entre em contato pelos nossos canais.</p>
+
+          <div class="flex flex-col gap-6">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-xl bg-stone-100 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+              </div>
+              <div>
+                <p class="font-sans text-xs font-bold text-stone-900 uppercase tracking-wider mb-0.5">Endereço</p>
+                <p class="font-sans text-sm text-stone-500">Av. Paulista, 1500 – Bela Vista, São Paulo/SP</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-xl bg-stone-100 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+              </div>
+              <div>
+                <p class="font-sans text-xs font-bold text-stone-900 uppercase tracking-wider mb-0.5">WhatsApp</p>
+                <p class="font-sans text-sm text-stone-500">(11) 99999-8888</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-xl bg-stone-100 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <div>
+                <p class="font-sans text-xs font-bold text-stone-900 uppercase tracking-wider mb-0.5">Horário</p>
+                <p class="font-sans text-sm text-stone-500">Seg–Sex: 9h–19h · Sáb: 9h–17h</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <form class="bg-white rounded-2xl p-8 border border-stone-200 shadow-lg shadow-stone-100/80 reveal reveal-delay-2" onsubmit="handleSubmit(event)" novalidate>
+          <div class="grid sm:grid-cols-2 gap-5 mb-5">
+            <div>
+              <label for="nome" class="block font-sans text-xs font-semibold text-stone-700 uppercase tracking-wider mb-2">Nome</label>
+              <input id="nome" type="text" placeholder="Seu nome" required autocomplete="given-name"
+                class="w-full px-4 py-3 rounded-xl border border-stone-200 font-sans text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-900 focus:border-transparent transition-all duration-200" />
+            </div>
+            <div>
+              <label for="tel" class="block font-sans text-xs font-semibold text-stone-700 uppercase tracking-wider mb-2">Telefone</label>
+              <input id="tel" type="tel" placeholder="(11) 99999-9999" autocomplete="tel"
+                class="w-full px-4 py-3 rounded-xl border border-stone-200 font-sans text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-900 focus:border-transparent transition-all duration-200" />
+            </div>
+          </div>
+          <div class="mb-5">
+            <label for="email" class="block font-sans text-xs font-semibold text-stone-700 uppercase tracking-wider mb-2">E-mail</label>
+            <input id="email" type="email" placeholder="seu@email.com" required autocomplete="email"
+              class="w-full px-4 py-3 rounded-xl border border-stone-200 font-sans text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-900 focus:border-transparent transition-all duration-200" />
+          </div>
+          <div class="mb-5">
+            <label for="servico" class="block font-sans text-xs font-semibold text-stone-700 uppercase tracking-wider mb-2">Serviço</label>
+            <select id="servico" class="w-full px-4 py-3 rounded-xl border border-stone-200 font-sans text-sm text-stone-900 focus:outline-none focus:ring-2 focus:ring-stone-900 focus:border-transparent transition-all duration-200 cursor-pointer bg-white">
+              <option value="">Selecione…</option>
+              <option>Exame de Vista Gratuito</option>
+              <option>Compra de Armação</option>
+              <option>Troca de Lentes</option>
+              <option>Manutenção / Ajuste</option>
+              <option>Outro</option>
+            </select>
+          </div>
+          <div class="mb-7">
+            <label for="msg" class="block font-sans text-xs font-semibold text-stone-700 uppercase tracking-wider mb-2">Mensagem <span class="font-normal normal-case text-stone-400">(opcional)</span></label>
+            <textarea id="msg" rows="3" placeholder="Conte-nos como podemos ajudar…"
+              class="w-full px-4 py-3 rounded-xl border border-stone-200 font-sans text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-900 focus:border-transparent transition-all duration-200 resize-none"></textarea>
+          </div>
+          <button id="submit-btn" type="submit"
+            class="w-full bg-stone-900 hover:bg-stone-800 text-white font-sans font-semibold text-sm py-3.5 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-stone-900/20 hover:-translate-y-0.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-2">
+            Enviar Agendamento →
+          </button>
+        </form>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════════════ FOOTER ══════════════════ -->
+  <footer class="bg-stone-950 pt-16 pb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+
+        <div class="sm:col-span-2 lg:col-span-1">
+          <a href="#" class="flex items-center gap-2.5 mb-4 cursor-pointer" aria-label="Visão Clara home">
+            <div class="w-8 h-8 rounded-full bg-gold-600 flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4 text-stone-900" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <span class="font-serif text-xl font-semibold text-white">Visão<span class="text-gold-500">Clara</span></span>
+          </a>
+          <p class="font-sans text-sm text-stone-500 leading-relaxed mb-6">Sua ótica de confiança há mais de 20 anos. Cuidando da sua visão com tecnologia, estilo e carinho.</p>
+          <div class="flex gap-3">
+            <a href="#" class="w-9 h-9 rounded-xl bg-stone-800 hover:bg-gold-600 flex items-center justify-center transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-500" aria-label="Facebook">
+              <svg class="w-4 h-4 text-stone-400 hover:text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="#" class="w-9 h-9 rounded-xl bg-stone-800 hover:bg-gold-600 flex items-center justify-center transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-500" aria-label="Instagram">
+              <svg class="w-4 h-4 text-stone-400" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="#" class="w-9 h-9 rounded-xl bg-stone-800 hover:bg-gold-600 flex items-center justify-center transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-500" aria-label="WhatsApp">
+              <svg class="w-4 h-4 text-stone-400" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="font-sans text-xs font-bold text-white uppercase tracking-wider mb-5">Produtos</h3>
+          <ul class="flex flex-col gap-3" role="list">
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Armações Grau</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Óculos Solar</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Lentes de Contato</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Acessórios</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Infantil</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="font-sans text-xs font-bold text-white uppercase tracking-wider mb-5">Serviços</h3>
+          <ul class="flex flex-col gap-3" role="list">
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Exame Gratuito</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Troca de Lentes</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Ajuste de Armação</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Lentes Especiais</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Garantia</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="font-sans text-xs font-bold text-white uppercase tracking-wider mb-5">Empresa</h3>
+          <ul class="flex flex-col gap-3" role="list">
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Sobre Nós</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Nossa Equipe</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Blog</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Trabalhe Conosco</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Contato</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="border-t border-stone-800 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <p class="font-sans text-xs text-stone-600">© 2026 Ótica Visão Clara. Todos os direitos reservados.</p>
+        <div class="flex gap-5">
+          <a href="#" class="font-sans text-xs text-stone-600 hover:text-gold-400 transition-colors cursor-pointer">Política de Privacidade</a>
+          <a href="#" class="font-sans text-xs text-stone-600 hover:text-gold-400 transition-colors cursor-pointer">Termos de Uso</a>
+        </div>
       </div>
     </div>
-    <div class="footer-col">
-      <h4>Produtos</h4>
-      <ul>
-        <li><a href="#">Armações Grau</a></li>
-        <li><a href="#">Óculos Solar</a></li>
-        <li><a href="#">Lentes de Contato</a></li>
-        <li><a href="#">Acessórios</a></li>
-        <li><a href="#">Infantil</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Serviços</h4>
-      <ul>
-        <li><a href="#">Exame Gratuito</a></li>
-        <li><a href="#">Troca de Lentes</a></li>
-        <li><a href="#">Ajuste de Armação</a></li>
-        <li><a href="#">Lentes Especiais</a></li>
-        <li><a href="#">Garantia</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Empresa</h4>
-      <ul>
-        <li><a href="#">Sobre Nós</a></li>
-        <li><a href="#">Nossa Equipe</a></li>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Trabalhe Conosco</a></li>
-        <li><a href="#">Contato</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>© 2026 Ótica Visão Clara. Todos os direitos reservados.</span>
-    <span>Política de Privacidade · Termos de Uso</span>
-  </div>
-</footer>
+  </footer>
 
-<script>
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 40);
-  });
-
-  function toggleMenu() {
-    document.getElementById('navLinks').classList.toggle('open');
-  }
-
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-    });
-  });
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 80);
-        observer.unobserve(entry.target);
+  <script>
+    // Nav scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        navbar.classList.add('shadow-xl', 'shadow-black/10');
+      } else {
+        navbar.classList.remove('shadow-xl', 'shadow-black/10');
       }
+    }, { passive: true });
+
+    // Mobile menu
+    const menuBtn  = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('icon-open');
+    const iconClose = document.getElementById('icon-close');
+    menuBtn.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('hidden');
+      menuBtn.setAttribute('aria-expanded', String(!open));
+      iconOpen.classList.toggle('hidden');
+      iconClose.classList.toggle('hidden');
     });
-  }, { threshold: 0.12 });
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        iconOpen.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+      });
+    });
 
-  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    // Filter tabs (ui-ux-pro-max: tab pattern)
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => {
+          b.classList.remove('active', 'bg-stone-900', 'text-white', 'border-stone-900');
+          b.classList.add('text-stone-500', 'border-stone-200', 'hover:border-stone-400', 'hover:text-stone-700');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('active', 'bg-stone-900', 'text-white', 'border-stone-900');
+        btn.classList.remove('text-stone-500', 'border-stone-200');
+        btn.setAttribute('aria-selected', 'true');
+      });
+    });
+    // Initial active state
+    document.querySelector('.tab-btn.active')?.classList.add('bg-stone-900', 'text-white', 'border-stone-900');
+    document.querySelectorAll('.tab-btn:not(.active)').forEach(b => {
+      b.classList.add('text-stone-500', 'border-stone-200', 'hover:border-stone-400', 'hover:text-stone-700');
+    });
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    const btn = e.target.querySelector('.btn-submit');
-    btn.textContent = '✓ Agendamento enviado!';
-    btn.style.background = '#15803d';
-    setTimeout(() => {
-      btn.textContent = 'Enviar Agendamento →';
-      btn.style.background = '';
-      e.target.reset();
-    }, 3000);
-  }
-</script>
+    // Scroll reveal (ui-ux-pro-max: ease-out for entering)
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // Form submit
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      btn.textContent = '✓ Agendamento enviado!';
+      btn.classList.add('bg-emerald-600');
+      btn.classList.remove('bg-stone-900', 'hover:bg-stone-800');
+      btn.disabled = true;
+      setTimeout(() => {
+        btn.textContent = 'Enviar Agendamento →';
+        btn.classList.remove('bg-emerald-600');
+        btn.classList.add('bg-stone-900', 'hover:bg-stone-800');
+        btn.disabled = false;
+        e.target.reset();
+      }, 3000);
+    }
+  </script>
+
 </body>
 </html>

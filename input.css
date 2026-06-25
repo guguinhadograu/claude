@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: 'Cormorant', Georgia, serif;
+  --font-sans: 'Montserrat', system-ui, sans-serif;
+  --color-gold-400: #FACC15;
+  --color-gold-500: #EAB308;
+  --color-gold-600: #CA8A04;
+  --color-gold-700: #A16207;
+}
