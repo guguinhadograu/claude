@@ -84,8 +84,7 @@ const PRODUCT_DATA: Record<ProductId, ProductData> = {
     subtitle: 'Óculos Solar Premium',
     description:
       'Lentes polarizadas com proteção UV400 e frames exclusivos das marcas mais desejadas do mundo. Moda e saúde visual em perfeita harmonia.',
-    image:
-      'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&q=90&fit=crop',
+    image: '/oculos-solar.png',
     badge: 'Nova Coleção',
     colors: {
       gradient: 'from-[#0F172A] to-[#1A1A2E]',
