@@ -59,7 +59,7 @@ const PRODUCT_DATA: Record<ProductId, ProductData> = {
     subtitle: 'Óculos de Grau Premium',
     description:
       'Armações de alta precisão para todas as prescrições. Design sofisticado com lentes antirreflexo de última geração para máximo conforto visual.',
-    image: '/oculos-grau.webp',
+    image: '/oculos-grau.png',
     badge: 'Mais Vendido',
     colors: {
       gradient: 'from-[#0F172A] to-[#1E3A5F]',
@@ -203,15 +203,8 @@ const ProductVisual = ({ data, isLeft }: { data: ProductData; isLeft: boolean })
     <div
       className="relative h-72 w-72 md:h-[400px] md:w-[400px] rounded-full shadow-2xl flex items-center justify-center overflow-hidden backdrop-blur-sm"
       style={{
-        background: data.id === 'grau'
-          ? 'radial-gradient(circle at 40% 35%, #ffffff 0%, #f0f4ff 60%, #dde6f7 100%)'
-          : 'rgba(10,16,32,0.60)',
-        border: data.id === 'grau'
-          ? '1px solid rgba(212,175,55,0.25)'
-          : '1px solid rgba(255,255,255,0.05)',
-        boxShadow: data.id === 'grau'
-          ? '0 0 60px rgba(212,175,55,0.15), inset 0 1px 0 rgba(255,255,255,0.8)'
-          : undefined,
+        background: 'rgba(10,16,32,0.55)',
+        border: `1px solid ${data.colors.accent}22`,
       }}
     >
       <AnimatePresence mode="wait">
