@@ -59,8 +59,7 @@ const PRODUCT_DATA: Record<ProductId, ProductData> = {
     subtitle: 'Óculos de Grau Premium',
     description:
       'Armações de alta precisão para todas as prescrições. Design sofisticado com lentes antirreflexo de última geração para máximo conforto visual.',
-    image:
-      'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=600&q=90&fit=crop',
+    image: '/oculos-grau.webp',
     badge: 'Mais Vendido',
     colors: {
       gradient: 'from-[#0F172A] to-[#1E3A5F]',
@@ -201,7 +200,20 @@ const ProductVisual = ({ data, isLeft }: { data: ProductData; isLeft: boolean })
     />
 
     {/* Image container */}
-    <div className="relative h-72 w-72 md:h-[400px] md:w-[400px] rounded-full border border-white/5 shadow-2xl flex items-center justify-center overflow-hidden bg-[#0A1020]/60 backdrop-blur-sm">
+    <div
+      className="relative h-72 w-72 md:h-[400px] md:w-[400px] rounded-full shadow-2xl flex items-center justify-center overflow-hidden backdrop-blur-sm"
+      style={{
+        background: data.id === 'grau'
+          ? 'radial-gradient(circle at 40% 35%, #ffffff 0%, #f0f4ff 60%, #dde6f7 100%)'
+          : 'rgba(10,16,32,0.60)',
+        border: data.id === 'grau'
+          ? '1px solid rgba(212,175,55,0.25)'
+          : '1px solid rgba(255,255,255,0.05)',
+        boxShadow: data.id === 'grau'
+          ? '0 0 60px rgba(212,175,55,0.15), inset 0 1px 0 rgba(255,255,255,0.8)'
+          : undefined,
+      }}
+    >
       <AnimatePresence mode="wait">
         <motion.div
           key={data.id}
@@ -214,13 +226,13 @@ const ProductVisual = ({ data, isLeft }: { data: ProductData; isLeft: boolean })
           <motion.div
             animate={{ y: [-8, 8, -8] }}
             transition={{ repeat: Infinity, duration: 7, ease: 'easeInOut' }}
-            className="w-full h-full flex items-center justify-center"
+            className="w-full h-full flex items-center justify-center p-6"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={data.image}
               alt={data.title}
-              className="w-full h-full object-cover rounded-full drop-shadow-2xl"
+              className="w-full h-full object-contain drop-shadow-2xl"
               draggable={false}
             />
           </motion.div>
