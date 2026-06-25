@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import Hero from "@/components/Hero";
+import EyewearShowcase from "@/components/ui/spatial-product-showcase";
 import Features from "@/components/Features";
 import Products from "@/components/Products";
 import Brands from "@/components/Brands";
@@ -17,7 +17,7 @@ export default function Home() {
       <LoadingScreen />
       <Header />
       <main>
-        <Hero />
+        <EyewearShowcase />
         <Features />
         <Products />
         <Brands />
