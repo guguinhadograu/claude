@@ -67,7 +67,7 @@ export default function Products() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.6 }}
-              className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${cat.gradient} p-8 min-h-[220px] flex flex-col justify-between border border-white/5 hover:border-[#D4AF37]/30 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-black/40`}
+              className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${cat.gradient} p-8 min-h-[220px] flex flex-col justify-between border border-white/5 hover:border-[#D4AF37]/30 cursor-pointer transition-all duration-[400ms] ease-out hover:shadow-2xl hover:shadow-black/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]`}
             >
               {/* Decorative circle */}
               <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full border border-[#D4AF37]/10 group-hover:border-[#D4AF37]/25 transition-colors duration-500" />

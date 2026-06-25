@@ -23,11 +23,12 @@ export default function Hero() {
       id="inicio"
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0F172A]"
     >
-      {/* Background gradient orbs */}
+      {/* Background — Liquid Glass iridescent orbs (400-600ms fluid transitions) */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#D4AF37]/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#D4AF37]/8 rounded-full blur-[100px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#1E293B]/60 rounded-full blur-[80px]" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#D4AF37]/12 rounded-full blur-[120px]" style={{ transition: "all 500ms cubic-bezier(0.25,0.46,0.45,0.94)" }} />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full blur-[100px]" style={{ background: "radial-gradient(circle, rgba(212,175,55,0.1) 0%, rgba(184,150,12,0.05) 60%, transparent 100%)" }} />
+        <div className="absolute top-1/3 right-1/3 w-64 h-64 rounded-full blur-[80px]" style={{ background: "radial-gradient(circle, rgba(232,208,128,0.06) 0%, transparent 70%)" }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#1E293B]/50 rounded-full blur-[80px]" />
       </div>
 
       {/* Grid pattern overlay */}

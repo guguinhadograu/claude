@@ -90,7 +90,7 @@ export default function Features() {
               <motion.div
                 key={feature.title}
                 variants={cardVariants}
-                className="group bg-white rounded-2xl p-8 border border-[#E2E8F0] hover:border-[#D4AF37]/40 hover:shadow-xl hover:shadow-[#D4AF37]/5 transition-all duration-300 cursor-default"
+                className="group bg-white rounded-2xl p-8 border border-[#E2E8F0] hover:border-[#D4AF37]/40 hover:shadow-xl hover:shadow-[#D4AF37]/5 transition-all duration-[400ms] ease-out cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
               >
                 <div className="w-12 h-12 rounded-xl bg-[#0F172A] flex items-center justify-center mb-6 group-hover:bg-[#D4AF37] transition-colors duration-300">
                   <Icon size={22} className="text-[#D4AF37] group-hover:text-[#0F172A] transition-colors duration-300" />

@@ -82,7 +82,7 @@ export default function Testimonials() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -30 }}
               transition={{ duration: 0.4 }}
-              className="glass rounded-2xl p-10 text-center"
+              className="liquid-card rounded-2xl p-10 text-center"
             >
               {/* Stars */}
               <div className="flex justify-center gap-1 mb-6">
