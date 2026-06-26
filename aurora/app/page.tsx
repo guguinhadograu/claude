@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import EyewearShowcase from "@/components/ui/spatial-product-showcase";
-import Features from "@/components/Features";
+import { FeaturesSection } from "@/components/ui/bento-features";
 import Products from "@/components/Products";
 import Brands from "@/components/Brands";
 import About from "@/components/About";
@@ -18,7 +18,7 @@ export default function Home() {
       <Header />
       <main>
         <EyewearShowcase />
-        <Features />
+        <FeaturesSection />
         <Products />
         <Brands />
         <About />
