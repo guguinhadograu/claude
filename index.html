@@ -1,1005 +1,793 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nexus — O Futuro é Agora</title>
+  <title>Ótica Visão Clara — Enxergue com Elegância</title>
+
+  <!-- ui-ux-pro-max: Cormorant + Montserrat (Luxury Serif pairing) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --accent: #7c3aed;
-      --accent2: #06b6d4;
-      --bg: #05050f;
-      --card: #0d0d1f;
-      --text: #e2e8f0;
-      --muted: #94a3b8;
+    /* ui-ux-pro-max: prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
     }
 
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      overflow-x: hidden;
+    /* Liquid Glass effect */
+    .glass {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+    .glass-light {
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(20px) saturate(200%);
+      -webkit-backdrop-filter: blur(20px) saturate(200%);
+      border: 1px solid rgba(255,255,255,0.9);
     }
 
-    /* ── CANVAS BACKGROUND ── */
-    #bg-canvas {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.2rem 5%;
-      background: rgba(5,5,15,.7);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(124,58,237,.15);
-    }
-
-    .logo {
-      font-size: 1.5rem;
-      font-weight: 800;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    /* Gold shimmer text */
+    .text-shimmer {
+      background: linear-gradient(90deg, #CA8A04 0%, #FACC15 30%, #CA8A04 60%, #EAB308 80%, #CA8A04 100%);
+      background-size: 200% auto;
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
-      letter-spacing: -.5px;
+      animation: shimmer 3s linear infinite;
     }
 
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 2.5rem;
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .4s; }
+
+    /* Morphing blob */
+    .blob {
+      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+      animation: morph 8s ease-in-out infinite;
+    }
+    @keyframes morph {
+      0%,100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+      25%      { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+      50%      { border-radius: 50% 60% 40% 70% / 40% 40% 60% 50%; }
+      75%      { border-radius: 40% 70% 60% 30% / 70% 30% 50% 40%; }
     }
 
-    nav a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: .9rem;
-      letter-spacing: .05em;
-      transition: color .2s;
-    }
-
-    nav a:hover { color: #fff; }
-
-    .btn-nav {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #fff !important;
-      padding: .5rem 1.4rem;
-      border-radius: 99px;
-      font-weight: 600;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 8rem 5% 4rem;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      background: rgba(124,58,237,.15);
-      border: 1px solid rgba(124,58,237,.4);
-      border-radius: 99px;
-      padding: .35rem 1rem;
-      font-size: .78rem;
-      color: #a78bfa;
-      font-weight: 600;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      margin-bottom: 2rem;
-      animation: fadeUp .8s ease both;
-    }
-
-    .badge-dot {
-      width: 6px; height: 6px;
-      background: #a78bfa;
-      border-radius: 50%;
-      animation: pulse 1.5s infinite;
-    }
-
-    h1 {
-      font-size: clamp(2.8rem, 7vw, 6rem);
-      font-weight: 900;
-      line-height: 1.05;
-      letter-spacing: -2px;
-      animation: fadeUp .8s .1s ease both;
-    }
-
-    h1 span {
-      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-sub {
-      max-width: 580px;
-      margin: 1.8rem auto 3rem;
-      color: var(--muted);
-      font-size: 1.15rem;
-      line-height: 1.7;
-      animation: fadeUp .8s .2s ease both;
-    }
-
-    .cta-group {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      justify-content: center;
-      animation: fadeUp .8s .3s ease both;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      padding: .85rem 2rem;
-      border-radius: 99px;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      border: none;
-      text-decoration: none;
-      transition: transform .2s, box-shadow .2s;
-    }
-
-    .btn:hover { transform: translateY(-2px); }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #fff;
-      box-shadow: 0 8px 32px rgba(124,58,237,.4);
-    }
-
-    .btn-primary:hover { box-shadow: 0 12px 40px rgba(124,58,237,.6); }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid rgba(255,255,255,.15);
-    }
-
-    .btn-outline:hover { border-color: rgba(124,58,237,.6); }
-
-    /* ── STATS ── */
-    .stats {
-      position: relative; z-index: 1;
-      display: flex;
-      justify-content: center;
-      gap: 4rem;
-      flex-wrap: wrap;
-      padding: 4rem 5%;
-      border-top: 1px solid rgba(255,255,255,.05);
-      border-bottom: 1px solid rgba(255,255,255,.05);
-    }
-
-    .stat { text-align: center; }
-
-    .stat-num {
-      font-size: 2.6rem;
-      font-weight: 900;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: block;
-    }
-
-    .stat-label { color: var(--muted); font-size: .9rem; margin-top: .3rem; }
-
-    /* ── FEATURES ── */
-    .section {
-      position: relative; z-index: 1;
-      padding: 6rem 5%;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      text-align: center;
-      color: var(--accent2);
-      font-size: .8rem;
-      font-weight: 700;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
-
-    .section-title {
-      text-align: center;
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      font-weight: 800;
-      letter-spacing: -1px;
-      margin-bottom: 1rem;
-    }
-
-    .section-sub {
-      text-align: center;
-      color: var(--muted);
-      max-width: 520px;
-      margin: 0 auto 4rem;
-      line-height: 1.7;
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,.06);
-      border-radius: 1.2rem;
-      padding: 2rem;
-      transition: transform .3s, border-color .3s, box-shadow .3s;
-      cursor: default;
-    }
-
-    .card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(124,58,237,.4);
-      box-shadow: 0 20px 60px rgba(124,58,237,.15);
-    }
-
-    .card-icon {
-      width: 52px; height: 52px;
-      border-radius: .8rem;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem;
-      margin-bottom: 1.4rem;
-    }
-
-    .icon-purple { background: rgba(124,58,237,.2); }
-    .icon-cyan   { background: rgba(6,182,212,.2); }
-    .icon-pink   { background: rgba(236,72,153,.2); }
-    .icon-green  { background: rgba(34,197,94,.2); }
-    .icon-orange { background: rgba(249,115,22,.2); }
-    .icon-yellow { background: rgba(234,179,8,.2); }
-
-    .card h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: .7rem;
-    }
-
-    .card p {
-      color: var(--muted);
-      font-size: .9rem;
-      line-height: 1.65;
-    }
-
-    /* ── SHOWCASE ── */
-    .showcase {
-      position: relative; z-index: 1;
-      padding: 0 5% 6rem;
-    }
-
-    .showcase-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,.06);
-      border-radius: 2rem;
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 460px;
-    }
-
-    .showcase-text {
-      padding: 4rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .showcase-text h2 {
-      font-size: clamp(1.6rem, 3vw, 2.4rem);
-      font-weight: 800;
-      letter-spacing: -1px;
-      margin-bottom: 1.2rem;
-    }
-
-    .showcase-text p {
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 2rem;
-    }
-
-    .tag-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .6rem;
-      margin-bottom: 2rem;
-    }
-
-    .tag {
-      background: rgba(124,58,237,.15);
-      border: 1px solid rgba(124,58,237,.3);
-      color: #a78bfa;
-      border-radius: 99px;
-      padding: .3rem .9rem;
-      font-size: .78rem;
-      font-weight: 600;
-    }
-
-    .showcase-visual {
-      background: linear-gradient(135deg, rgba(124,58,237,.2), rgba(6,182,212,.2));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(60px);
-    }
-
-    .orb1 {
-      width: 300px; height: 300px;
-      background: rgba(124,58,237,.5);
-      top: -60px; right: -60px;
-    }
-
-    .orb2 {
-      width: 200px; height: 200px;
-      background: rgba(6,182,212,.4);
-      bottom: -40px; left: -40px;
-    }
-
-    .mock-ui {
-      position: relative; z-index: 1;
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 1rem;
-      padding: 1.5rem;
-      width: 260px;
-      backdrop-filter: blur(10px);
-    }
-
-    .mock-row {
-      display: flex;
-      align-items: center;
-      gap: .8rem;
-      margin-bottom: 1rem;
-    }
-
-    .mock-avatar {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-    }
-
-    .mock-lines { flex: 1; }
-
-    .mock-line {
-      height: 8px;
-      border-radius: 99px;
-      background: rgba(255,255,255,.15);
-      margin-bottom: 5px;
-    }
-
-    .mock-line.short { width: 60%; }
-    .mock-line.med   { width: 80%; }
-
-    .mock-bar {
-      display: flex;
-      align-items: flex-end;
-      gap: 6px;
-      height: 60px;
-      margin-top: 1.2rem;
-    }
-
-    .bar {
-      flex: 1;
-      border-radius: 4px 4px 0 0;
-      background: linear-gradient(180deg, var(--accent), var(--accent2));
-      opacity: .85;
-    }
-
-    /* ── TESTIMONIALS ── */
-    .testimonials {
-      position: relative; z-index: 1;
-      padding: 0 5% 6rem;
-    }
-
-    .testimonials-inner { max-width: 1200px; margin: 0 auto; }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .tcard {
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,.06);
-      border-radius: 1.2rem;
-      padding: 2rem;
-    }
-
-    .tcard-stars { color: #facc15; margin-bottom: 1rem; font-size: 1.1rem; }
-
-    .tcard-text {
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 1.5rem;
-      font-style: italic;
-    }
-
-    .tcard-author {
-      display: flex;
-      align-items: center;
-      gap: .9rem;
-    }
-
-    .tcard-avatar {
-      width: 42px; height: 42px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 1rem;
-      color: #fff;
-    }
-
-    .tcard-name { font-weight: 700; font-size: .95rem; }
-    .tcard-role { color: var(--muted); font-size: .82rem; }
-
-    /* ── PRICING ── */
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      max-width: 960px;
-      margin: 0 auto;
-    }
-
-    .pcard {
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,.06);
-      border-radius: 1.5rem;
-      padding: 2.5rem 2rem;
-      text-align: center;
-      position: relative;
-      transition: transform .3s;
-    }
-
-    .pcard:hover { transform: translateY(-4px); }
-
-    .pcard.featured {
-      border-color: rgba(124,58,237,.5);
-      box-shadow: 0 0 0 1px rgba(124,58,237,.3), 0 20px 60px rgba(124,58,237,.2);
-    }
-
-    .pcard-badge {
-      position: absolute;
-      top: -14px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #fff;
-      font-size: .72rem;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: .3rem 1rem;
-      border-radius: 99px;
-    }
-
-    .pcard-name {
-      font-size: .85rem;
-      font-weight: 700;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 1.2rem;
-    }
-
-    .pcard-price {
-      font-size: 3.5rem;
-      font-weight: 900;
-      letter-spacing: -2px;
-    }
-
-    .pcard-price span { font-size: 1.3rem; vertical-align: super; font-weight: 700; }
-    .pcard-price small { font-size: 1rem; color: var(--muted); font-weight: 400; letter-spacing: 0; }
-
-    .pcard-features {
-      list-style: none;
-      margin: 2rem 0;
-      text-align: left;
-    }
-
-    .pcard-features li {
-      display: flex;
-      align-items: center;
-      gap: .7rem;
-      padding: .5rem 0;
-      font-size: .9rem;
-      color: var(--muted);
-      border-bottom: 1px solid rgba(255,255,255,.05);
-    }
-
-    .pcard-features li:last-child { border-bottom: none; }
-
-    .check { color: #4ade80; font-size: 1rem; }
-
-    /* ── CTA SECTION ── */
-    .cta-section {
-      position: relative; z-index: 1;
-      padding: 0 5% 8rem;
-    }
-
-    .cta-box {
-      max-width: 900px;
-      margin: 0 auto;
-      background: linear-gradient(135deg, rgba(124,58,237,.25), rgba(6,182,212,.15));
-      border: 1px solid rgba(124,58,237,.3);
-      border-radius: 2rem;
-      padding: 5rem 3rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cta-box::before {
+    /* Noise texture overlay */
+    .noise::after {
       content: '';
       position: absolute;
-      top: -100px; left: 50%;
-      transform: translateX(-50%);
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(124,58,237,.3), transparent 70%);
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
       pointer-events: none;
-    }
-
-    .cta-box h2 {
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      font-weight: 900;
-      letter-spacing: -1px;
-      position: relative;
-    }
-
-    .cta-box p {
-      color: var(--muted);
-      margin: 1rem auto 2.5rem;
-      max-width: 480px;
-      line-height: 1.7;
-      position: relative;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      position: relative; z-index: 1;
-      border-top: 1px solid rgba(255,255,255,.05);
-      padding: 3rem 5%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-      color: var(--muted);
-      font-size: .85rem;
-    }
-
-    footer .logo { font-size: 1.2rem; }
-
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: .4; }
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(32px);
-      transition: opacity .7s, transform .7s;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @media (max-width: 768px) {
-      nav ul { display: none; }
-      .showcase-inner { grid-template-columns: 1fr; }
-      .showcase-visual { min-height: 250px; }
-      .showcase-text { padding: 2rem; }
+      border-radius: inherit;
     }
   </style>
 </head>
-<body>
 
-<canvas id="bg-canvas"></canvas>
+<body class="bg-stone-50 font-sans text-stone-900 overflow-x-hidden">
 
-<!-- NAV -->
-<nav>
-  <div class="logo">Nexus</div>
-  <ul>
-    <li><a href="#features">Recursos</a></li>
-    <li><a href="#showcase">Produto</a></li>
-    <li><a href="#pricing">Preços</a></li>
-    <li><a href="#cta" class="btn-nav">Começar grátis</a></li>
-  </ul>
-</nav>
+  <!-- ══════════════════ NAV ══════════════════ -->
+  <header id="navbar" class="fixed top-3 left-4 right-4 z-50 transition-all duration-300">
+    <nav class="glass-light rounded-2xl px-5 py-3 flex items-center justify-between max-w-7xl mx-auto shadow-lg shadow-black/5">
 
-<!-- HERO -->
-<section class="hero">
-  <div class="badge"><span class="badge-dot"></span>Novo · Versão 2.0 lançada</div>
-  <h1>O futuro da<br/><span>criação digital</span><br/>começa aqui</h1>
-  <p class="hero-sub">
-    Plataforma de última geração que combina inteligência artificial, design e performance
-    para transformar suas ideias em realidade em minutos.
-  </p>
-  <div class="cta-group">
-    <a href="#cta" class="btn btn-primary">🚀 Começar grátis</a>
-    <a href="#showcase" class="btn btn-outline">▶ Ver demonstração</a>
-  </div>
-</section>
-
-<!-- STATS -->
-<div class="stats">
-  <div class="stat reveal">
-    <span class="stat-num" data-target="98">0</span>
-    <div class="stat-label">% de satisfação</div>
-  </div>
-  <div class="stat reveal">
-    <span class="stat-num" data-target="500">0</span>
-    <div class="stat-label">mil usuários ativos</div>
-  </div>
-  <div class="stat reveal">
-    <span class="stat-num" data-target="3">0</span>
-    <div class="stat-label">ms de latência média</div>
-  </div>
-  <div class="stat reveal">
-    <span class="stat-num" data-target="99">0</span>
-    <div class="stat-label">% de uptime garantido</div>
-  </div>
-</div>
-
-<!-- FEATURES -->
-<section class="section" id="features">
-  <p class="section-label reveal">Recursos poderosos</p>
-  <h2 class="section-title reveal">Tudo que você precisa,<br/>em um só lugar</h2>
-  <p class="section-sub reveal">
-    Ferramentas de alto desempenho construídas para criadores, desenvolvedores e times modernos.
-  </p>
-  <div class="grid-3">
-    <div class="card reveal">
-      <div class="card-icon icon-purple">⚡</div>
-      <h3>Velocidade Extrema</h3>
-      <p>Processamento em tempo real com latência inferior a 3ms. Sua experiência nunca vai travar.</p>
-    </div>
-    <div class="card reveal">
-      <div class="card-icon icon-cyan">🤖</div>
-      <h3>IA Integrada</h3>
-      <p>Modelos de IA de última geração integrados nativamente para automatizar qualquer tarefa.</p>
-    </div>
-    <div class="card reveal">
-      <div class="card-icon icon-pink">🎨</div>
-      <h3>Design System</h3>
-      <p>Componentes prontos e customizáveis que seguem as melhores práticas de UX/UI.</p>
-    </div>
-    <div class="card reveal">
-      <div class="card-icon icon-green">🔒</div>
-      <h3>Segurança Total</h3>
-      <p>Criptografia end-to-end, conformidade com LGPD e certificações ISO 27001.</p>
-    </div>
-    <div class="card reveal">
-      <div class="card-icon icon-orange">📊</div>
-      <h3>Analytics Real-Time</h3>
-      <p>Dashboards interativos com dados em tempo real para decisões mais inteligentes.</p>
-    </div>
-    <div class="card reveal">
-      <div class="card-icon icon-yellow">🌐</div>
-      <h3>Global CDN</h3>
-      <p>Rede de distribuição em 42 regiões garantindo performance perfeita no mundo todo.</p>
-    </div>
-  </div>
-</section>
-
-<!-- SHOWCASE -->
-<div class="showcase" id="showcase">
-  <div class="showcase-inner reveal">
-    <div class="showcase-text">
-      <h2>Dashboards inteligentes que se adaptam a você</h2>
-      <p>
-        Nossa interface aprende com seu comportamento e reorganiza automaticamente os dados
-        mais relevantes para o seu fluxo de trabalho. Menos cliques, mais resultado.
-      </p>
-      <div class="tag-list">
-        <span class="tag">IA Adaptativa</span>
-        <span class="tag">Drag & Drop</span>
-        <span class="tag">Tempo Real</span>
-        <span class="tag">Multi-Device</span>
-      </div>
-      <a href="#cta" class="btn btn-primary" style="align-self:flex-start;">Experimentar agora →</a>
-    </div>
-    <div class="showcase-visual">
-      <div class="orb orb1"></div>
-      <div class="orb orb2"></div>
-      <div class="mock-ui">
-        <div class="mock-row">
-          <div class="mock-avatar"></div>
-          <div class="mock-lines">
-            <div class="mock-line med"></div>
-            <div class="mock-line short"></div>
-          </div>
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-2.5 cursor-pointer" aria-label="Visão Clara home">
+        <div class="w-8 h-8 rounded-full bg-stone-900 flex items-center justify-center flex-shrink-0">
+          <!-- Eye icon (SVG — Heroicons) -->
+          <svg class="w-4 h-4 text-gold-500" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
         </div>
-        <div class="mock-line" style="width:100%;height:6px;margin-bottom:8px;"></div>
-        <div class="mock-line" style="width:90%;height:6px;margin-bottom:8px;"></div>
-        <div class="mock-line" style="width:75%;height:6px;margin-bottom:0;"></div>
-        <div class="mock-bar">
-          <div class="bar" style="height:40%"></div>
-          <div class="bar" style="height:70%"></div>
-          <div class="bar" style="height:55%"></div>
-          <div class="bar" style="height:90%"></div>
-          <div class="bar" style="height:65%"></div>
-          <div class="bar" style="height:80%"></div>
-          <div class="bar" style="height:45%"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+        <span class="font-serif text-xl font-semibold text-stone-900 leading-none">Visão<span class="text-gold-600">Clara</span></span>
+      </a>
 
-<!-- TESTIMONIALS -->
-<div class="testimonials">
-  <div class="testimonials-inner">
-    <p class="section-label reveal" style="text-align:center;margin-bottom:.8rem;">Depoimentos</p>
-    <h2 class="section-title reveal">O que nossos usuários dizem</h2>
-    <p class="section-sub reveal">Mais de 500 mil criadores já transformaram seus negócios com o Nexus.</p>
-    <div class="grid-2">
-      <div class="tcard reveal">
-        <div class="tcard-stars">★★★★★</div>
-        <p class="tcard-text">"O Nexus mudou completamente como eu trabalho. Em 2 semanas economizei 15 horas que gastava em tarefas repetitivas. É inacreditável."</p>
-        <div class="tcard-author">
-          <div class="tcard-avatar" style="background:linear-gradient(135deg,#7c3aed,#06b6d4)">A</div>
-          <div>
-            <div class="tcard-name">Ana Lima</div>
-            <div class="tcard-role">Designer UX · Freelancer</div>
-          </div>
-        </div>
-      </div>
-      <div class="tcard reveal">
-        <div class="tcard-stars">★★★★★</div>
-        <p class="tcard-text">"Migramos toda a nossa stack para o Nexus e a performance triplicou. O suporte é excepcional e a plataforma evolui muito rápido."</p>
-        <div class="tcard-author">
-          <div class="tcard-avatar" style="background:linear-gradient(135deg,#ec4899,#f97316)">R</div>
-          <div>
-            <div class="tcard-name">Rafael Costa</div>
-            <div class="tcard-role">CTO · Startup de Tecnologia</div>
-          </div>
-        </div>
-      </div>
-      <div class="tcard reveal">
-        <div class="tcard-stars">★★★★★</div>
-        <p class="tcard-text">"A IA integrada sugere melhorias que eu nunca teria pensado sozinha. Parece que tenho um assistente sênior trabalhando comigo 24h."</p>
-        <div class="tcard-author">
-          <div class="tcard-avatar" style="background:linear-gradient(135deg,#22c55e,#06b6d4)">M</div>
-          <div>
-            <div class="tcard-name">Mariana Souza</div>
-            <div class="tcard-role">Product Manager · E-commerce</div>
-          </div>
-        </div>
-      </div>
-      <div class="tcard reveal">
-        <div class="tcard-stars">★★★★★</div>
-        <p class="tcard-text">"Melhor ROI que já tive em qualquer ferramenta. Em 3 meses o plano Pro se pagou mais de 10 vezes. Não consigo imaginar voltar atrás."</p>
-        <div class="tcard-author">
-          <div class="tcard-avatar" style="background:linear-gradient(135deg,#eab308,#f97316)">P</div>
-          <div>
-            <div class="tcard-name">Pedro Alves</div>
-            <div class="tcard-role">CEO · Agência Digital</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- PRICING -->
-<section class="section" id="pricing" style="max-width:1100px;">
-  <p class="section-label reveal">Preços simples</p>
-  <h2 class="section-title reveal">Planos para cada estágio</h2>
-  <p class="section-sub reveal">Comece grátis. Escale conforme cresce. Sem surpresas na fatura.</p>
-  <div class="pricing-grid">
-    <div class="pcard reveal">
-      <div class="pcard-name">Starter</div>
-      <div class="pcard-price"><span>R$</span>0<small>/mês</small></div>
-      <ul class="pcard-features">
-        <li><span class="check">✓</span> 5 projetos</li>
-        <li><span class="check">✓</span> 10 GB de armazenamento</li>
-        <li><span class="check">✓</span> Analytics básico</li>
-        <li><span class="check">✓</span> Suporte por email</li>
+      <!-- Desktop links -->
+      <ul class="hidden md:flex items-center gap-8" role="list">
+        <li><a href="#colecao" class="font-sans text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors duration-200 cursor-pointer">Coleção</a></li>
+        <li><a href="#servicos" class="font-sans text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors duration-200 cursor-pointer">Serviços</a></li>
+        <li><a href="#depoimentos" class="font-sans text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors duration-200 cursor-pointer">Depoimentos</a></li>
+        <li><a href="#contato" class="font-sans text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors duration-200 cursor-pointer">Contato</a></li>
       </ul>
-      <a href="#cta" class="btn btn-outline" style="width:100%;justify-content:center;">Começar grátis</a>
-    </div>
-    <div class="pcard featured reveal">
-      <div class="pcard-badge">Mais popular</div>
-      <div class="pcard-name">Pro</div>
-      <div class="pcard-price"><span>R$</span>97<small>/mês</small></div>
-      <ul class="pcard-features">
-        <li><span class="check">✓</span> Projetos ilimitados</li>
-        <li><span class="check">✓</span> 500 GB de armazenamento</li>
-        <li><span class="check">✓</span> IA completa integrada</li>
-        <li><span class="check">✓</span> Analytics avançado</li>
-        <li><span class="check">✓</span> Suporte prioritário 24/7</li>
-        <li><span class="check">✓</span> API acesso completo</li>
+
+      <!-- CTA -->
+      <div class="flex items-center gap-3">
+        <a href="#contato" class="hidden sm:inline-flex items-center gap-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-stone-900/20 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-2">
+          Agendar Exame
+        </a>
+        <!-- Hamburger (mobile) -->
+        <button id="menu-btn" class="md:hidden w-10 h-10 flex items-center justify-center rounded-xl hover:bg-stone-100 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu">
+          <svg id="icon-open" class="w-5 h-5 text-stone-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg id="icon-close" class="w-5 h-5 text-stone-700 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden mt-2 glass-light rounded-2xl px-5 py-4 max-w-7xl mx-auto shadow-lg">
+      <ul class="flex flex-col gap-4" role="list">
+        <li><a href="#colecao"     class="block text-sm font-medium text-stone-700 hover:text-stone-900 transition-colors cursor-pointer py-1">Coleção</a></li>
+        <li><a href="#servicos"    class="block text-sm font-medium text-stone-700 hover:text-stone-900 transition-colors cursor-pointer py-1">Serviços</a></li>
+        <li><a href="#depoimentos" class="block text-sm font-medium text-stone-700 hover:text-stone-900 transition-colors cursor-pointer py-1">Depoimentos</a></li>
+        <li><a href="#contato"     class="block text-sm font-medium text-stone-700 hover:text-stone-900 transition-colors cursor-pointer py-1">Contato</a></li>
+        <li><a href="#contato"     class="inline-flex bg-stone-900 text-white text-sm font-semibold px-5 py-2.5 rounded-xl cursor-pointer transition-colors hover:bg-stone-800">Agendar Exame</a></li>
       </ul>
-      <a href="#cta" class="btn btn-primary" style="width:100%;justify-content:center;">Assinar Pro</a>
     </div>
-    <div class="pcard reveal">
-      <div class="pcard-name">Enterprise</div>
-      <div class="pcard-price" style="font-size:2.2rem;padding-top:.5rem;">Sob consulta</div>
-      <ul class="pcard-features">
-        <li><span class="check">✓</span> Tudo do Pro</li>
-        <li><span class="check">✓</span> SLA dedicado</li>
-        <li><span class="check">✓</span> Deploy on-premise</li>
-        <li><span class="check">✓</span> SSO & SAML</li>
-        <li><span class="check">✓</span> Gerente de conta</li>
-      </ul>
-      <a href="#cta" class="btn btn-outline" style="width:100%;justify-content:center;">Falar com vendas</a>
+  </header>
+
+  <main>
+
+    <!-- ══════════════════ HERO ══════════════════ -->
+    <section class="relative min-h-screen flex items-center overflow-hidden bg-stone-900 noise pt-24 pb-16">
+
+      <!-- Background blobs (Liquid Glass morphing) -->
+      <div class="absolute top-1/4 -left-32 w-[500px] h-[500px] blob opacity-20" style="background:radial-gradient(circle, #CA8A04 0%, transparent 70%);" aria-hidden="true"></div>
+      <div class="absolute bottom-0 right-0 w-[600px] h-[600px] blob opacity-10" style="background:radial-gradient(circle, #EAB308 0%, transparent 65%); animation-delay:-4s;" aria-hidden="true"></div>
+
+      <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid lg:grid-cols-2 gap-12 items-center">
+
+        <!-- Text -->
+        <div>
+          <p class="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-5 animate-fade-in">Nova Coleção 2026</p>
+          <h1 class="font-serif text-5xl sm:text-6xl lg:text-7xl font-semibold leading-[1.1] text-white mb-6">
+            Visão que<br/>
+            <em class="not-italic text-shimmer">transforma</em><br/>
+            perspectivas
+          </h1>
+          <p class="font-sans text-base font-light text-stone-400 leading-relaxed mb-10 max-w-md">
+            Armações exclusivas e lentes de alta tecnologia para quem enxerga o mundo com distinção. Mais de 20 anos cuidando do seu olhar.
+          </p>
+
+          <div class="flex flex-wrap gap-4 mb-14">
+            <a href="#colecao" class="inline-flex items-center gap-2 bg-gold-600 hover:bg-gold-500 text-white font-semibold text-sm px-7 py-3.5 rounded-xl transition-all duration-200 hover:shadow-xl hover:shadow-gold-600/30 hover:-translate-y-0.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-500 focus:ring-offset-2 focus:ring-offset-stone-900">
+              Ver Coleção
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+            <a href="#contato" class="inline-flex items-center gap-2 border border-stone-600 hover:border-stone-400 text-stone-300 hover:text-white font-semibold text-sm px-7 py-3.5 rounded-xl transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-400 focus:ring-offset-2 focus:ring-offset-stone-900">
+              Agendar Exame Grátis
+            </a>
+          </div>
+
+          <!-- Stats -->
+          <div class="flex gap-8 sm:gap-12">
+            <div>
+              <p class="font-serif text-3xl font-semibold text-white">15k<span class="text-gold-500">+</span></p>
+              <p class="font-sans text-xs text-stone-500 mt-0.5 font-medium uppercase tracking-wide">Clientes</p>
+            </div>
+            <div class="border-l border-stone-800 pl-8 sm:pl-12">
+              <p class="font-serif text-3xl font-semibold text-white">200<span class="text-gold-500">+</span></p>
+              <p class="font-sans text-xs text-stone-500 mt-0.5 font-medium uppercase tracking-wide">Modelos</p>
+            </div>
+            <div class="border-l border-stone-800 pl-8 sm:pl-12">
+              <p class="font-serif text-3xl font-semibold text-white">20<span class="text-gold-500"> anos</span></p>
+              <p class="font-sans text-xs text-stone-500 mt-0.5 font-medium uppercase tracking-wide">Experiência</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero visual: liquid glass frames -->
+        <div class="relative flex items-center justify-center animate-float lg:justify-end" aria-hidden="true">
+          <div class="relative w-[340px] h-[340px] sm:w-[420px] sm:h-[420px]">
+            <!-- Glow -->
+            <div class="absolute inset-8 rounded-full bg-gold-600/20 blur-3xl"></div>
+            <!-- Glass card -->
+            <div class="absolute inset-0 glass rounded-3xl flex items-center justify-center">
+              <svg viewBox="0 0 380 220" class="w-72 sm:w-80" role="img" aria-label="Óculos aviador dourado">
+                <defs>
+                  <radialGradient id="lg1" cx="40%" cy="35%">
+                    <stop offset="0%" stop-color="#CA8A04" stop-opacity=".45"/>
+                    <stop offset="100%" stop-color="#1C1917" stop-opacity=".75"/>
+                  </radialGradient>
+                  <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="blur"/>
+                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+                <!-- Lente esquerda -->
+                <ellipse cx="120" cy="110" rx="90" ry="72" fill="url(#lg1)" stroke="#CA8A04" stroke-width="2.5" filter="url(#glow)"/>
+                <!-- Lente direita -->
+                <ellipse cx="260" cy="110" rx="90" ry="72" fill="url(#lg1)" stroke="#CA8A04" stroke-width="2.5" filter="url(#glow)"/>
+                <!-- Ponte -->
+                <path d="M210 108 Q190 95 170 108" fill="none" stroke="#CA8A04" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- Hastes -->
+                <line x1="30" y1="85" x2="5" y2="90" stroke="#CA8A04" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="350" y1="85" x2="375" y2="90" stroke="#CA8A04" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- Reflexo -->
+                <ellipse cx="100" cy="88" rx="20" ry="12" fill="white" opacity=".12" transform="rotate(-18 100 88)"/>
+                <ellipse cx="240" cy="88" rx="20" ry="12" fill="white" opacity=".12" transform="rotate(-18 240 88)"/>
+              </svg>
+            </div>
+            <!-- Floating badge -->
+            <div class="absolute -bottom-4 -right-4 glass rounded-2xl px-4 py-3 shadow-xl">
+              <p class="font-sans text-xs text-stone-300 font-medium">Exame</p>
+              <p class="font-serif text-lg font-semibold text-gold-400 leading-tight">Gratuito</p>
+            </div>
+            <div class="absolute -top-4 -left-4 glass rounded-2xl px-4 py-3 shadow-xl">
+              <p class="font-sans text-xs text-stone-300 font-medium">Coleção</p>
+              <p class="font-serif text-lg font-semibold text-gold-400 leading-tight">2026</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40" aria-hidden="true">
+        <p class="font-sans text-xs tracking-widest text-stone-400 uppercase">Scroll</p>
+        <div class="w-px h-10 bg-gradient-to-b from-stone-400 to-transparent"></div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ BRANDS ══════════════════ -->
+    <section class="bg-stone-100 border-y border-stone-200 py-6 overflow-hidden" aria-label="Marcas parceiras">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-center gap-6 sm:gap-12">
+        <p class="font-sans text-xs font-semibold tracking-[0.15em] uppercase text-stone-400">Marcas</p>
+        <div class="flex flex-wrap items-center gap-8 sm:gap-14">
+          <span class="font-serif text-base font-semibold text-stone-300 hover:text-stone-600 transition-colors cursor-default select-none">Ray-Ban</span>
+          <span class="font-serif text-base font-semibold text-stone-300 hover:text-stone-600 transition-colors cursor-default select-none">Oakley</span>
+          <span class="font-serif text-base font-semibold text-stone-300 hover:text-stone-600 transition-colors cursor-default select-none">Prada</span>
+          <span class="font-serif text-base font-semibold text-stone-300 hover:text-stone-600 transition-colors cursor-default select-none">Versace</span>
+          <span class="font-serif text-base font-semibold text-stone-300 hover:text-stone-600 transition-colors cursor-default select-none">Hoya</span>
+          <span class="font-serif text-base font-semibold text-stone-300 hover:text-stone-600 transition-colors cursor-default select-none">Transitions</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ COLEÇÃO ══════════════════ -->
+    <section id="colecao" class="py-24 bg-stone-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 reveal">
+          <div>
+            <p class="font-sans text-xs font-semibold tracking-[0.18em] uppercase text-gold-600 mb-3">Nossa Coleção</p>
+            <h2 class="font-serif text-4xl sm:text-5xl font-semibold text-stone-900">Armações para<br/><em class="not-italic text-stone-500">todo estilo</em></h2>
+          </div>
+          <!-- Filter tabs -->
+          <div class="flex gap-2 flex-wrap" role="tablist" aria-label="Filtrar coleção">
+            <button role="tab" aria-selected="true"  class="tab-btn active font-sans text-xs font-semibold px-4 py-2 rounded-lg border transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-1">Todos</button>
+            <button role="tab" aria-selected="false" class="tab-btn font-sans text-xs font-semibold px-4 py-2 rounded-lg border transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-1">Masculino</button>
+            <button role="tab" aria-selected="false" class="tab-btn font-sans text-xs font-semibold px-4 py-2 rounded-lg border transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-1">Feminino</button>
+            <button role="tab" aria-selected="false" class="tab-btn font-sans text-xs font-semibold px-4 py-2 rounded-lg border transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-1">Solar</button>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <!-- Card 1 -->
+          <article class="group bg-white rounded-2xl overflow-hidden border border-stone-200 hover:border-stone-300 hover:shadow-xl hover:shadow-stone-200/80 transition-all duration-300 cursor-pointer reveal reveal-delay-1">
+            <div class="h-52 bg-indigo-50 flex items-center justify-center relative overflow-hidden">
+              <span class="absolute top-3 left-3 font-sans text-[10px] font-bold tracking-widest uppercase bg-gold-600 text-white px-2.5 py-1 rounded-full">Novo</span>
+              <svg viewBox="0 0 320 180" class="w-44 group-hover:scale-105 transition-transform duration-500" aria-label="Armação retangular azul">
+                <rect x="28" y="52" width="115" height="78" rx="20" fill="none" stroke="#4f46e5" stroke-width="4"/>
+                <rect x="178" y="52" width="115" height="78" rx="20" fill="none" stroke="#4f46e5" stroke-width="4"/>
+                <line x1="143" y1="88" x2="178" y2="88" stroke="#4f46e5" stroke-width="3.5"/>
+                <line x1="28"  y1="68" x2="6"   y2="63" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="293" y1="68" x2="314" y2="63" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="p-5">
+              <p class="font-sans text-[10px] font-bold tracking-[0.14em] uppercase text-gold-600 mb-1">Premium</p>
+              <h3 class="font-serif text-lg font-semibold text-stone-900 mb-4">Retangular Azul Clássico</h3>
+              <div class="flex items-center justify-between">
+                <p class="font-sans text-xl font-semibold text-stone-900">R$ 389</p>
+                <button class="w-9 h-9 rounded-full bg-stone-900 hover:bg-gold-600 text-white flex items-center justify-center transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-1" aria-label="Adicionar ao carrinho">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="group bg-white rounded-2xl overflow-hidden border border-stone-200 hover:border-stone-300 hover:shadow-xl hover:shadow-stone-200/80 transition-all duration-300 cursor-pointer reveal reveal-delay-2">
+            <div class="h-52 bg-rose-50 flex items-center justify-center relative overflow-hidden">
+              <span class="absolute top-3 left-3 font-sans text-[10px] font-bold tracking-widest uppercase bg-red-500 text-white px-2.5 py-1 rounded-full">Oferta</span>
+              <svg viewBox="0 0 320 180" class="w-44 group-hover:scale-105 transition-transform duration-500" aria-label="Armação oval vermelha">
+                <ellipse cx="105" cy="92" rx="70" ry="55" fill="none" stroke="#e11d48" stroke-width="4"/>
+                <ellipse cx="215" cy="92" rx="70" ry="55" fill="none" stroke="#e11d48" stroke-width="4"/>
+                <path d="M175 90 Q160 80 145 90" fill="none" stroke="#e11d48" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="35"  y1="68" x2="10"  y2="63" stroke="#e11d48" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="285" y1="68" x2="310" y2="63" stroke="#e11d48" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="p-5">
+              <p class="font-sans text-[10px] font-bold tracking-[0.14em] uppercase text-gold-600 mb-1">Feminino</p>
+              <h3 class="font-serif text-lg font-semibold text-stone-900 mb-4">Oval Vermelho Elegante</h3>
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="font-sans text-sm text-stone-400 line-through leading-none">R$ 320</p>
+                  <p class="font-sans text-xl font-semibold text-stone-900">R$ 219</p>
+                </div>
+                <button class="w-9 h-9 rounded-full bg-stone-900 hover:bg-gold-600 text-white flex items-center justify-center transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-1" aria-label="Adicionar ao carrinho">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="group bg-white rounded-2xl overflow-hidden border border-stone-200 hover:border-stone-300 hover:shadow-xl hover:shadow-stone-200/80 transition-all duration-300 cursor-pointer reveal reveal-delay-3">
+            <div class="h-52 bg-emerald-50 flex items-center justify-center relative overflow-hidden">
+              <svg viewBox="0 0 320 180" class="w-44 group-hover:scale-105 transition-transform duration-500" aria-label="Armação quadrada verde">
+                <rect x="26" y="58" width="112" height="70" rx="8" fill="none" stroke="#15803d" stroke-width="4"/>
+                <rect x="182" y="58" width="112" height="70" rx="8" fill="none" stroke="#15803d" stroke-width="4"/>
+                <line x1="138" y1="90" x2="182" y2="90" stroke="#15803d" stroke-width="3.5"/>
+                <line x1="26"  y1="74" x2="6"   y2="68" stroke="#15803d" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="294" y1="74" x2="314" y2="68" stroke="#15803d" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="p-5">
+              <p class="font-sans text-[10px] font-bold tracking-[0.14em] uppercase text-gold-600 mb-1">Sport</p>
+              <h3 class="font-serif text-lg font-semibold text-stone-900 mb-4">Quadrado Verde Urbano</h3>
+              <div class="flex items-center justify-between">
+                <p class="font-sans text-xl font-semibold text-stone-900">R$ 459</p>
+                <button class="w-9 h-9 rounded-full bg-stone-900 hover:bg-gold-600 text-white flex items-center justify-center transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-1" aria-label="Adicionar ao carrinho">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 4 -->
+          <article class="group bg-white rounded-2xl overflow-hidden border border-stone-200 hover:border-stone-300 hover:shadow-xl hover:shadow-stone-200/80 transition-all duration-300 cursor-pointer reveal reveal-delay-4">
+            <div class="h-52 bg-amber-50 flex items-center justify-center relative overflow-hidden">
+              <span class="absolute top-3 left-3 font-sans text-[10px] font-bold tracking-widest uppercase bg-stone-900 text-gold-400 px-2.5 py-1 rounded-full">Top</span>
+              <svg viewBox="0 0 320 180" class="w-44 group-hover:scale-105 transition-transform duration-500" aria-label="Óculos aviador dourado solar">
+                <defs>
+                  <linearGradient id="goldG" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#CA8A04" stop-opacity=".6"/>
+                    <stop offset="100%" stop-color="#92400e" stop-opacity=".85"/>
+                  </linearGradient>
+                </defs>
+                <ellipse cx="105" cy="92" rx="74" ry="60" fill="url(#goldG)" stroke="#CA8A04" stroke-width="3.5"/>
+                <ellipse cx="215" cy="92" rx="74" ry="60" fill="url(#goldG)" stroke="#CA8A04" stroke-width="3.5"/>
+                <path d="M179 90 Q162 79 145 90" fill="none" stroke="#CA8A04" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="31"  y1="70" x2="6"   y2="75" stroke="#CA8A04" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="289" y1="70" x2="314" y2="75" stroke="#CA8A04" stroke-width="2.5" stroke-linecap="round"/>
+                <ellipse cx="88"  cy="74" rx="18" ry="11" fill="white" opacity=".14" transform="rotate(-20 88 74)"/>
+                <ellipse cx="198" cy="74" rx="18" ry="11" fill="white" opacity=".14" transform="rotate(-20 198 74)"/>
+              </svg>
+            </div>
+            <div class="p-5">
+              <p class="font-sans text-[10px] font-bold tracking-[0.14em] uppercase text-gold-600 mb-1">Solar · Ray-Ban</p>
+              <h3 class="font-serif text-lg font-semibold text-stone-900 mb-4">Aviador Dourado Premium</h3>
+              <div class="flex items-center justify-between">
+                <p class="font-sans text-xl font-semibold text-stone-900">R$ 699</p>
+                <button class="w-9 h-9 rounded-full bg-stone-900 hover:bg-gold-600 text-white flex items-center justify-center transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-1" aria-label="Adicionar ao carrinho">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                </button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ SERVIÇOS ══════════════════ -->
+    <section id="servicos" class="py-24 bg-stone-900 relative overflow-hidden">
+      <div class="absolute inset-0" aria-hidden="true">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gold-600/5 blur-3xl rounded-full"></div>
+      </div>
+      <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+          <p class="font-sans text-xs font-semibold tracking-[0.18em] uppercase text-gold-500 mb-3">O Que Oferecemos</p>
+          <h2 class="font-serif text-4xl sm:text-5xl font-semibold text-white">Serviços completos<br/><em class="not-italic text-stone-400">para sua visão</em></h2>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+          <div class="glass rounded-2xl p-7 hover:bg-white/10 transition-all duration-300 cursor-default reveal reveal-delay-1">
+            <div class="w-12 h-12 rounded-xl bg-gold-600/20 flex items-center justify-center mb-5">
+              <!-- Eye check icon (SVG) -->
+              <svg class="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <h3 class="font-serif text-lg font-semibold text-white mb-2">Exame de Vista Gratuito</h3>
+            <p class="font-sans text-sm text-stone-400 leading-relaxed">Avaliação completa por optometristas certificados com equipamentos de última geração.</p>
+          </div>
+
+          <div class="glass rounded-2xl p-7 hover:bg-white/10 transition-all duration-300 cursor-default reveal reveal-delay-2">
+            <div class="w-12 h-12 rounded-xl bg-gold-600/20 flex items-center justify-center mb-5">
+              <!-- Sparkles / lens icon -->
+              <svg class="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/>
+              </svg>
+            </div>
+            <h3 class="font-serif text-lg font-semibold text-white mb-2">Lentes de Alta Tecnologia</h3>
+            <p class="font-sans text-sm text-stone-400 leading-relaxed">Anti-reflexo, fotossensível, blue light, progressiva e muito mais para cada necessidade.</p>
+          </div>
+
+          <div class="glass rounded-2xl p-7 hover:bg-white/10 transition-all duration-300 cursor-default reveal reveal-delay-3">
+            <div class="w-12 h-12 rounded-xl bg-gold-600/20 flex items-center justify-center mb-5">
+              <!-- Bolt / speed icon -->
+              <svg class="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>
+              </svg>
+            </div>
+            <h3 class="font-serif text-lg font-semibold text-white mb-2">Entrega em 24 Horas</h3>
+            <p class="font-sans text-sm text-stone-400 leading-relaxed">Lentes simples prontas no dia. Itens especiais entregues em até 24 horas sem custo extra.</p>
+          </div>
+
+          <div class="glass rounded-2xl p-7 hover:bg-white/10 transition-all duration-300 cursor-default reveal reveal-delay-4">
+            <div class="w-12 h-12 rounded-xl bg-gold-600/20 flex items-center justify-center mb-5">
+              <!-- Shield check icon -->
+              <svg class="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
+              </svg>
+            </div>
+            <h3 class="font-serif text-lg font-semibold text-white mb-2">Garantia Estendida</h3>
+            <p class="font-sans text-sm text-stone-400 leading-relaxed">12 meses de garantia em todas as armações e lentes, com troca facilitada.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ COMO FUNCIONA ══════════════════ -->
+    <section class="py-24 bg-stone-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+          <p class="font-sans text-xs font-semibold tracking-[0.18em] uppercase text-gold-600 mb-3">Simples e Rápido</p>
+          <h2 class="font-serif text-4xl sm:text-5xl font-semibold text-stone-900">Como funciona</h2>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="text-center reveal reveal-delay-1">
+            <div class="w-14 h-14 rounded-2xl bg-stone-900 text-white font-serif text-2xl font-semibold flex items-center justify-center mx-auto mb-5">1</div>
+            <h3 class="font-serif text-lg font-semibold text-stone-900 mb-2">Agende seu Exame</h3>
+            <p class="font-sans text-sm text-stone-500 leading-relaxed">Online ou por telefone, rápido e sem filas.</p>
+          </div>
+          <div class="text-center reveal reveal-delay-2">
+            <div class="w-14 h-14 rounded-2xl bg-stone-900 text-white font-serif text-2xl font-semibold flex items-center justify-center mx-auto mb-5">2</div>
+            <h3 class="font-serif text-lg font-semibold text-stone-900 mb-2">Exame Completo</h3>
+            <p class="font-sans text-sm text-stone-500 leading-relaxed">Especialistas emitem a receita digital na hora.</p>
+          </div>
+          <div class="text-center reveal reveal-delay-3">
+            <div class="w-14 h-14 rounded-2xl bg-stone-900 text-white font-serif text-2xl font-semibold flex items-center justify-center mx-auto mb-5">3</div>
+            <h3 class="font-serif text-lg font-semibold text-stone-900 mb-2">Escolha sua Armação</h3>
+            <p class="font-sans text-sm text-stone-500 leading-relaxed">+200 modelos com consultoria personalizada de estilo.</p>
+          </div>
+          <div class="text-center reveal reveal-delay-4">
+            <div class="w-14 h-14 rounded-2xl bg-stone-900 text-white font-serif text-2xl font-semibold flex items-center justify-center mx-auto mb-5">4</div>
+            <h3 class="font-serif text-lg font-semibold text-stone-900 mb-2">Retire ou Receba</h3>
+            <p class="font-sans text-sm text-stone-500 leading-relaxed">Seus óculos chegam prontos, regulados e calibrados.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ DEPOIMENTOS ══════════════════ -->
+    <section id="depoimentos" class="py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+          <p class="font-sans text-xs font-semibold tracking-[0.18em] uppercase text-gold-600 mb-3">Depoimentos</p>
+          <h2 class="font-serif text-4xl sm:text-5xl font-semibold text-stone-900">O que nossos<br/><em class="not-italic text-stone-400">clientes dizem</em></h2>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-6">
+
+          <blockquote class="bg-stone-50 rounded-2xl p-7 border border-stone-100 hover:shadow-lg hover:shadow-stone-100 transition-all duration-300 cursor-default reveal reveal-delay-1">
+            <div class="flex gap-0.5 mb-4" aria-label="5 de 5 estrelas">
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            </div>
+            <p class="font-sans text-sm text-stone-600 leading-relaxed mb-6">"Atendimento impecável do início ao fim. As lentes progressivas ficaram perfeitas e o preço foi muito justo. Recomendo para toda a família!"</p>
+            <footer class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-amber-200 flex items-center justify-center font-sans text-sm font-bold text-amber-800 flex-shrink-0" aria-hidden="true">MF</div>
+              <div>
+                <p class="font-sans text-sm font-semibold text-stone-900">Maria Fernanda S.</p>
+                <p class="font-sans text-xs text-stone-400">Cliente desde 2020</p>
+              </div>
+            </footer>
+          </blockquote>
+
+          <blockquote class="bg-stone-50 rounded-2xl p-7 border border-stone-100 hover:shadow-lg hover:shadow-stone-100 transition-all duration-300 cursor-default reveal reveal-delay-2">
+            <div class="flex gap-0.5 mb-4" aria-label="5 de 5 estrelas">
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            </div>
+            <p class="font-sans text-sm text-stone-600 leading-relaxed mb-6">"Comprei meu aviador dourado e amei! Qualidade incrível, entrega rápida e a equipe super atenciosa. Com certeza vou voltar!"</p>
+            <footer class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-emerald-200 flex items-center justify-center font-sans text-sm font-bold text-emerald-800 flex-shrink-0" aria-hidden="true">RC</div>
+              <div>
+                <p class="font-sans text-sm font-semibold text-stone-900">Rafael Costa</p>
+                <p class="font-sans text-xs text-stone-400">Cliente desde 2022</p>
+              </div>
+            </footer>
+          </blockquote>
+
+          <blockquote class="bg-stone-50 rounded-2xl p-7 border border-stone-100 hover:shadow-lg hover:shadow-stone-100 transition-all duration-300 cursor-default reveal reveal-delay-3">
+            <div class="flex gap-0.5 mb-4" aria-label="5 de 5 estrelas">
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            </div>
+            <p class="font-sans text-sm text-stone-600 leading-relaxed mb-6">"Fiz o exame gratuito e em menos de 2 horas saí com meus óculos novos. Equipe profissional e atenciosa. Voltarei com certeza!"</p>
+            <footer class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-rose-200 flex items-center justify-center font-sans text-sm font-bold text-rose-800 flex-shrink-0" aria-hidden="true">AP</div>
+              <div>
+                <p class="font-sans text-sm font-semibold text-stone-900">Ana Paula M.</p>
+                <p class="font-sans text-xs text-stone-400">Cliente desde 2021</p>
+              </div>
+            </footer>
+          </blockquote>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ CTA BANNER ══════════════════ -->
+    <section class="relative overflow-hidden bg-stone-900 py-24 noise">
+      <div class="absolute inset-0" aria-hidden="true">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] rounded-full bg-gold-600/10 blur-3xl"></div>
+      </div>
+      <div class="relative z-10 max-w-3xl mx-auto text-center px-4 sm:px-6 reveal">
+        <p class="font-sans text-xs font-semibold tracking-[0.18em] uppercase text-gold-500 mb-4">Oferta Exclusiva</p>
+        <h2 class="font-serif text-4xl sm:text-5xl font-semibold text-white mb-5">Exame de Vista<br/><em class="not-italic text-shimmer">100% Gratuito</em></h2>
+        <p class="font-sans text-base text-stone-400 mb-10 leading-relaxed">Agende hoje e ganhe desconto especial na sua primeira compra. Vagas limitadas para este mês.</p>
+        <a href="#contato" class="inline-flex items-center gap-2 bg-gold-600 hover:bg-gold-500 text-white font-semibold text-sm px-9 py-4 rounded-xl transition-all duration-200 hover:shadow-2xl hover:shadow-gold-600/30 hover:-translate-y-0.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-500 focus:ring-offset-2 focus:ring-offset-stone-900">
+          Agendar Agora — É Grátis
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- ══════════════════ CONTATO ══════════════════ -->
+    <section id="contato" class="py-24 bg-stone-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-16 items-start">
+
+        <!-- Info -->
+        <div class="reveal">
+          <p class="font-sans text-xs font-semibold tracking-[0.18em] uppercase text-gold-600 mb-3">Fale Conosco</p>
+          <h2 class="font-serif text-4xl sm:text-5xl font-semibold text-stone-900 mb-5">Agende sua<br/><em class="not-italic text-stone-400">consulta</em></h2>
+          <p class="font-sans text-sm text-stone-500 leading-relaxed mb-10 max-w-sm">Nossa equipe está pronta para te atender. Preencha o formulário ou entre em contato pelos nossos canais.</p>
+
+          <div class="flex flex-col gap-6">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-xl bg-stone-100 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+              </div>
+              <div>
+                <p class="font-sans text-xs font-bold text-stone-900 uppercase tracking-wider mb-0.5">Endereço</p>
+                <p class="font-sans text-sm text-stone-500">Av. Paulista, 1500 – Bela Vista, São Paulo/SP</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-xl bg-stone-100 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+              </div>
+              <div>
+                <p class="font-sans text-xs font-bold text-stone-900 uppercase tracking-wider mb-0.5">WhatsApp</p>
+                <p class="font-sans text-sm text-stone-500">(11) 99999-8888</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-xl bg-stone-100 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <div>
+                <p class="font-sans text-xs font-bold text-stone-900 uppercase tracking-wider mb-0.5">Horário</p>
+                <p class="font-sans text-sm text-stone-500">Seg–Sex: 9h–19h · Sáb: 9h–17h</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <form class="bg-white rounded-2xl p-8 border border-stone-200 shadow-lg shadow-stone-100/80 reveal reveal-delay-2" onsubmit="handleSubmit(event)" novalidate>
+          <div class="grid sm:grid-cols-2 gap-5 mb-5">
+            <div>
+              <label for="nome" class="block font-sans text-xs font-semibold text-stone-700 uppercase tracking-wider mb-2">Nome</label>
+              <input id="nome" type="text" placeholder="Seu nome" required autocomplete="given-name"
+                class="w-full px-4 py-3 rounded-xl border border-stone-200 font-sans text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-900 focus:border-transparent transition-all duration-200" />
+            </div>
+            <div>
+              <label for="tel" class="block font-sans text-xs font-semibold text-stone-700 uppercase tracking-wider mb-2">Telefone</label>
+              <input id="tel" type="tel" placeholder="(11) 99999-9999" autocomplete="tel"
+                class="w-full px-4 py-3 rounded-xl border border-stone-200 font-sans text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-900 focus:border-transparent transition-all duration-200" />
+            </div>
+          </div>
+          <div class="mb-5">
+            <label for="email" class="block font-sans text-xs font-semibold text-stone-700 uppercase tracking-wider mb-2">E-mail</label>
+            <input id="email" type="email" placeholder="seu@email.com" required autocomplete="email"
+              class="w-full px-4 py-3 rounded-xl border border-stone-200 font-sans text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-900 focus:border-transparent transition-all duration-200" />
+          </div>
+          <div class="mb-5">
+            <label for="servico" class="block font-sans text-xs font-semibold text-stone-700 uppercase tracking-wider mb-2">Serviço</label>
+            <select id="servico" class="w-full px-4 py-3 rounded-xl border border-stone-200 font-sans text-sm text-stone-900 focus:outline-none focus:ring-2 focus:ring-stone-900 focus:border-transparent transition-all duration-200 cursor-pointer bg-white">
+              <option value="">Selecione…</option>
+              <option>Exame de Vista Gratuito</option>
+              <option>Compra de Armação</option>
+              <option>Troca de Lentes</option>
+              <option>Manutenção / Ajuste</option>
+              <option>Outro</option>
+            </select>
+          </div>
+          <div class="mb-7">
+            <label for="msg" class="block font-sans text-xs font-semibold text-stone-700 uppercase tracking-wider mb-2">Mensagem <span class="font-normal normal-case text-stone-400">(opcional)</span></label>
+            <textarea id="msg" rows="3" placeholder="Conte-nos como podemos ajudar…"
+              class="w-full px-4 py-3 rounded-xl border border-stone-200 font-sans text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-900 focus:border-transparent transition-all duration-200 resize-none"></textarea>
+          </div>
+          <button id="submit-btn" type="submit"
+            class="w-full bg-stone-900 hover:bg-stone-800 text-white font-sans font-semibold text-sm py-3.5 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-stone-900/20 hover:-translate-y-0.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-2">
+            Enviar Agendamento →
+          </button>
+        </form>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════════════ FOOTER ══════════════════ -->
+  <footer class="bg-stone-950 pt-16 pb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+
+        <div class="sm:col-span-2 lg:col-span-1">
+          <a href="#" class="flex items-center gap-2.5 mb-4 cursor-pointer" aria-label="Visão Clara home">
+            <div class="w-8 h-8 rounded-full bg-gold-600 flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4 text-stone-900" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <span class="font-serif text-xl font-semibold text-white">Visão<span class="text-gold-500">Clara</span></span>
+          </a>
+          <p class="font-sans text-sm text-stone-500 leading-relaxed mb-6">Sua ótica de confiança há mais de 20 anos. Cuidando da sua visão com tecnologia, estilo e carinho.</p>
+          <div class="flex gap-3">
+            <a href="#" class="w-9 h-9 rounded-xl bg-stone-800 hover:bg-gold-600 flex items-center justify-center transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-500" aria-label="Facebook">
+              <svg class="w-4 h-4 text-stone-400 hover:text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="#" class="w-9 h-9 rounded-xl bg-stone-800 hover:bg-gold-600 flex items-center justify-center transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-500" aria-label="Instagram">
+              <svg class="w-4 h-4 text-stone-400" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="#" class="w-9 h-9 rounded-xl bg-stone-800 hover:bg-gold-600 flex items-center justify-center transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-500" aria-label="WhatsApp">
+              <svg class="w-4 h-4 text-stone-400" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="font-sans text-xs font-bold text-white uppercase tracking-wider mb-5">Produtos</h3>
+          <ul class="flex flex-col gap-3" role="list">
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Armações Grau</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Óculos Solar</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Lentes de Contato</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Acessórios</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Infantil</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="font-sans text-xs font-bold text-white uppercase tracking-wider mb-5">Serviços</h3>
+          <ul class="flex flex-col gap-3" role="list">
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Exame Gratuito</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Troca de Lentes</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Ajuste de Armação</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Lentes Especiais</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Garantia</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="font-sans text-xs font-bold text-white uppercase tracking-wider mb-5">Empresa</h3>
+          <ul class="flex flex-col gap-3" role="list">
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Sobre Nós</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Nossa Equipe</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Blog</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Trabalhe Conosco</a></li>
+            <li><a href="#" class="font-sans text-sm text-stone-500 hover:text-gold-400 transition-colors duration-200 cursor-pointer">Contato</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="border-t border-stone-800 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <p class="font-sans text-xs text-stone-600">© 2026 Ótica Visão Clara. Todos os direitos reservados.</p>
+        <div class="flex gap-5">
+          <a href="#" class="font-sans text-xs text-stone-600 hover:text-gold-400 transition-colors cursor-pointer">Política de Privacidade</a>
+          <a href="#" class="font-sans text-xs text-stone-600 hover:text-gold-400 transition-colors cursor-pointer">Termos de Uso</a>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
+  </footer>
 
-<!-- CTA -->
-<div class="cta-section" id="cta">
-  <div class="cta-box reveal">
-    <h2>Pronto para decolar?</h2>
-    <p>Junte-se a mais de 500 mil usuários que já estão construindo o futuro com o Nexus. Sem cartão de crédito.</p>
-    <div class="cta-group">
-      <a href="#" class="btn btn-primary">🚀 Criar conta grátis</a>
-      <a href="#" class="btn btn-outline">Falar com especialista</a>
-    </div>
-  </div>
-</div>
-
-<!-- FOOTER -->
-<footer>
-  <div class="logo">Nexus</div>
-  <div>© 2026 Nexus. Todos os direitos reservados.</div>
-  <div style="display:flex;gap:1.5rem;">
-    <a href="#" style="color:var(--muted);text-decoration:none;">Privacidade</a>
-    <a href="#" style="color:var(--muted);text-decoration:none;">Termos</a>
-    <a href="#" style="color:var(--muted);text-decoration:none;">Contato</a>
-  </div>
-</footer>
-
-<script>
-  /* ── PARTICLE CANVAS ── */
-  const canvas = document.getElementById('bg-canvas');
-  const ctx = canvas.getContext('2d');
-  let W, H, particles = [];
-
-  function resize() {
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-
-  class Particle {
-    constructor() { this.reset(); }
-    reset() {
-      this.x  = Math.random() * W;
-      this.y  = Math.random() * H;
-      this.r  = Math.random() * 1.5 + .4;
-      this.vx = (Math.random() - .5) * .3;
-      this.vy = (Math.random() - .5) * .3;
-      this.a  = Math.random() * .5 + .1;
-    }
-    update() {
-      this.x += this.vx; this.y += this.vy;
-      if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
-    }
-    draw() {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(124,58,237,${this.a})`;
-      ctx.fill();
-    }
-  }
-
-  function initParticles() {
-    particles = [];
-    const count = Math.min(Math.floor(W * H / 8000), 120);
-    for (let i = 0; i < count; i++) particles.push(new Particle());
-  }
-
-  function connectParticles() {
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const d  = Math.sqrt(dx*dx + dy*dy);
-        if (d < 120) {
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(124,58,237,${(1 - d/120) * .15})`;
-          ctx.lineWidth = .6;
-          ctx.stroke();
-        }
+  <script>
+    // Nav scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        navbar.classList.add('shadow-xl', 'shadow-black/10');
+      } else {
+        navbar.classList.remove('shadow-xl', 'shadow-black/10');
       }
-    }
-  }
+    }, { passive: true });
 
-  function animate() {
-    ctx.clearRect(0, 0, W, H);
-    particles.forEach(p => { p.update(); p.draw(); });
-    connectParticles();
-    requestAnimationFrame(animate);
-  }
-
-  resize();
-  initParticles();
-  animate();
-  window.addEventListener('resize', () => { resize(); initParticles(); });
-
-  /* ── SCROLL REVEAL ── */
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: .12 });
-
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  /* ── COUNTER ANIMATION ── */
-  function animateCounter(el) {
-    const target = +el.dataset.target;
-    const dur = 1600;
-    const start = performance.now();
-    function step(now) {
-      const t = Math.min((now - start) / dur, 1);
-      const ease = 1 - Math.pow(1 - t, 4);
-      el.textContent = Math.round(ease * target);
-      if (t < 1) requestAnimationFrame(step);
-      else el.textContent = target;
-    }
-    requestAnimationFrame(step);
-  }
-
-  const statObserver = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const num = e.target.querySelector('.stat-num');
-        if (num && num.dataset.target) {
-          animateCounter(num);
-          statObserver.unobserve(e.target);
-        }
-      }
+    // Mobile menu
+    const menuBtn  = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('icon-open');
+    const iconClose = document.getElementById('icon-close');
+    menuBtn.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('hidden');
+      menuBtn.setAttribute('aria-expanded', String(!open));
+      iconOpen.classList.toggle('hidden');
+      iconClose.classList.toggle('hidden');
     });
-  }, { threshold: .5 });
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        iconOpen.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+      });
+    });
 
-  document.querySelectorAll('.stat').forEach(el => statObserver.observe(el));
-</script>
+    // Filter tabs (ui-ux-pro-max: tab pattern)
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => {
+          b.classList.remove('active', 'bg-stone-900', 'text-white', 'border-stone-900');
+          b.classList.add('text-stone-500', 'border-stone-200', 'hover:border-stone-400', 'hover:text-stone-700');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('active', 'bg-stone-900', 'text-white', 'border-stone-900');
+        btn.classList.remove('text-stone-500', 'border-stone-200');
+        btn.setAttribute('aria-selected', 'true');
+      });
+    });
+    // Initial active state
+    document.querySelector('.tab-btn.active')?.classList.add('bg-stone-900', 'text-white', 'border-stone-900');
+    document.querySelectorAll('.tab-btn:not(.active)').forEach(b => {
+      b.classList.add('text-stone-500', 'border-stone-200', 'hover:border-stone-400', 'hover:text-stone-700');
+    });
+
+    // Scroll reveal (ui-ux-pro-max: ease-out for entering)
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // Form submit
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      btn.textContent = '✓ Agendamento enviado!';
+      btn.classList.add('bg-emerald-600');
+      btn.classList.remove('bg-stone-900', 'hover:bg-stone-800');
+      btn.disabled = true;
+      setTimeout(() => {
+        btn.textContent = 'Enviar Agendamento →';
+        btn.classList.remove('bg-emerald-600');
+        btn.classList.add('bg-stone-900', 'hover:bg-stone-800');
+        btn.disabled = false;
+        e.target.reset();
+      }, 3000);
+    }
+  </script>
+
 </body>
 </html>
